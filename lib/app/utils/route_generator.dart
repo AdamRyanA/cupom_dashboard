@@ -1,0 +1,35 @@
+import 'package:cupom_dashboard/app/pages/Home/home_page.dart';
+import 'package:cupom_dashboard/app/pages/pages.dart';
+import 'package:cupom_dashboard/data/models/models.dart';
+import 'package:flutter/material.dart';
+
+class RouteGenerator {
+  static const String rSplash = '/';
+  static const String rHome= '/home';
+
+  static Route<dynamic>? generateRoute(RouteSettings settings){
+    ScreenArguments? args = settings.arguments as ScreenArguments?;
+    switch (settings.name) {
+      case rSplash:
+        return MaterialPageRoute(builder: (_) => const SplashPage());
+      case rHome:
+        return MaterialPageRoute(builder: (_) => const HomePage());
+      default:
+        return _erroRoute();
+    }
+  }
+
+  static Route<dynamic> _erroRoute() {
+    return MaterialPageRoute(builder: (_) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Tela não encontrada!"),
+        ),
+        body: const Center(
+          child: Text("Tela não encontrada"),
+        ),
+      );
+    });
+  }
+
+}

@@ -1,6 +1,5 @@
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -97,7 +96,9 @@ class _HomePageState extends State<HomePage> {
                                   foregroundColor: primaryLightColor,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
                               ),
-                                onPressed: (){},
+                                onPressed: (){
+                                Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rSignIn, (route) => false);
+                                },
                                 child: Text(
                                     'Login parceiros',
                                   style: button.copyWith(color: blueColor),
@@ -180,8 +181,6 @@ class _HomePageState extends State<HomePage> {
                   color: whiteColor,
                   child: Column(
                     children: [
-                      //const SizedBox(height: 128),
-
                       const SizedBox(height: 128),
                       Container(
                         key: key1,

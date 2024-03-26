@@ -13,9 +13,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Ratatá',
       //home: SplashPage(),
-      home: HomePage(),
-      //initialRoute: '/',
-      initialRoute: '/home',
+      home: SignUpPage(),
+      initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

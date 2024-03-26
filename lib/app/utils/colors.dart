@@ -8,6 +8,7 @@ Color blackColor60 = const Color(0xff000000).withOpacity(0.6);
 Color blackColor87 = const Color(0xff000000).withOpacity(0.87);
 Color greyColor = const Color(0xfff4f4f4);
 Color greyNeutroColor = const Color(0xffE8E8E8);
+Color greyNeutro60Color = const Color(0xffAAAAAA);
 Color greyDarkColor = const Color(0xffD9D9D9);
 Color blueColor = const Color(0xff003566);
 Color blueLightColor = const Color(0xff0075FF);

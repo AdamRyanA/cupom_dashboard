@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/app/widgets/widgets.dart';
+import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:cupom_dashboard/domain/usecases/controllers.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -30,6 +31,16 @@ class _SignInPageState extends State<SignInPage> {
   signIn(){
     setState(() => focus = false);
     if (_formKey.currentState!.validate()) {
+      Company company = Company.toNull();
+      company.email = controllerEmail.text;
+      company.cnpj = controllerCNPJ.text;
+
+      String? result = 'Teste'; //TODO
+      if(result != null){
+        Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyPanel, (route) => false);
+      }else{
+        showSnackBar(context, 'Erro ao fazer o login');
+      }
 
     }
   }
@@ -43,6 +54,17 @@ class _SignInPageState extends State<SignInPage> {
             flex: 2,
             child: Container(
               color: primaryLightColor,
+              child: Center(
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyPanel, (route) => false);
+                  },
+                  child: Icon(
+                      Icons.ac_unit,
+                    //color: whiteColor,
+                  ),
+                ),
+              ),
             ),
           ),
           Expanded(

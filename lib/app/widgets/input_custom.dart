@@ -15,11 +15,12 @@ class InputCustom extends StatelessWidget {
   final String? hint;
   final String label;
   final bool? maxLines;
+  final double? radius;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
   final String? Function(String?)? onFieldSubmitted;
 
-  const InputCustom({Key? key, required this.controller, this.keyboardType, required this.hint, this.validator, this.obscure = false, this.maxLines, this.inputFormatters, required this.label, this.onPressedObscure, this.suffixObscure = false, this.prefixBool = false, this.focusNode, this.autofocus = false, this.onFieldSubmitted}) : super(key: key);
+  const InputCustom({Key? key, required this.controller, this.keyboardType, required this.hint, this.validator, this.obscure = false, this.maxLines, this.inputFormatters, required this.label, this.onPressedObscure, this.suffixObscure = false, this.prefixBool = false, this.focusNode, this.autofocus = false, this.onFieldSubmitted, this.radius}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +43,16 @@ class InputCustom extends StatelessWidget {
               cursorColor: blackColor60,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: greyNeutro60Color),
-                    borderRadius: BorderRadius.circular(14)
+                    borderSide: BorderSide(color: greyNeutro60Color, width: 1.5),
+                    borderRadius: BorderRadius.circular(radius ?? 14)
                 ),
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: greyNeutro60Color),
-                    borderRadius: BorderRadius.circular(14)
+                    borderSide: BorderSide(color: greyNeutro60Color, width: 1.5),
+                    borderRadius: BorderRadius.circular(radius ?? 14)
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: greyNeutro60Color),
-                    borderRadius: BorderRadius.circular(14)
+                    borderSide: BorderSide(color: greyNeutro60Color, width: 1.5),
+                    borderRadius: BorderRadius.circular(radius ?? 14)
                 ),
                 contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                 hintText: hint,

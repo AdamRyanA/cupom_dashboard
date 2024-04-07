@@ -6,6 +6,8 @@ class RouteGenerator {
   static const String rHome = '/home';
   static const String rSignIn = '/signIn';
   static const String rSignUp = '/signUp';
+  static const String rCompanyPanel = '/companyPanel';
+  static const String rNewOffer = '/newOffer';
 
   static Route<dynamic>? generateRoute(RouteSettings settings){
     //ScreenArguments? args = settings.arguments as ScreenArguments?;
@@ -18,6 +20,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SignInPage());
       case rSignUp:
         return MaterialPageRoute(builder: (_) => const SignUpPage());
+      case rCompanyPanel:
+        return MaterialPageRoute(builder: (_) => const CompanyPanelPage());
+      case rNewOffer:
+        return MaterialPageRoute(builder: (_) => const NewOfferPage());
       default:
         return _erroRoute();
     }

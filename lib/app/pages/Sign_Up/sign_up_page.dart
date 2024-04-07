@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/app/widgets/widgets.dart';
+import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:cupom_dashboard/domain/usecases/controllers.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -38,6 +39,18 @@ class _SignUpPageState extends State<SignUpPage> {
   signUp(){
     setState(() => focus = false);
     if (_formKey.currentState!.validate()) {
+      Company company = Company.toNull();
+      company.name = controllerName.text;
+      company.cnpj = controllerCNPJ.text;
+      company.email = controllerEmail.text;
+      company.phone = controllerPhone.text;
+      
+      String? result = 'Teste'; //TODO
+      if(result != null){
+        Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyPanel, (route) => false);
+      }else{
+        showSnackBar(context, 'Erro ao criar usuario');
+      }
 
     }
   }

@@ -1,4 +1,6 @@
 import 'package:cupom_dashboard/app/utils/utils.dart';
+import 'package:cupom_dashboard/app/widgets/widgets.dart';
+import 'package:cupom_dashboard/domain/usecases/authentication.dart';
 import 'package:flutter/material.dart';
 
 class CompanyPanelPage extends StatefulWidget {
@@ -122,6 +124,14 @@ class _CompanyPanelPageState extends State<CompanyPanelPage> {
                           ListInfo(title: 'Email', subtitle: email),
                           ListInfo(title: 'Telefone', subtitle: telefone),
                           ListInfo(title: 'Senha', subtitle: senha),
+                          ElevatedCustom(
+                              text: 'Sair',
+                              foregroundColor: blueColor,
+                              backgroundColor: whiteColor,
+                              onPressed: (){
+                                Authentication.signOut(context);
+                              }
+                          )
                         ],
                       ),
                     ),
@@ -164,7 +174,7 @@ class _CompanyPanelPageState extends State<CompanyPanelPage> {
                               )
                             ],
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),

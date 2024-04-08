@@ -35,8 +35,52 @@ class _NewOfferPageState extends State<NewOfferPage> {
       if(n==5) thirtyOff = true;
     });
   }
-
   String time = 'Fechado';
+
+  final themeTime = ThemeData(
+    timePickerTheme: TimePickerThemeData(
+      backgroundColor: whiteColor,
+      helpTextStyle: body1,
+      dialBackgroundColor: primaryLightColor,
+      dialHandColor: primaryColor,
+      inputDecorationTheme: InputDecorationTheme(
+        focusColor: Colors.greenAccent
+      ),
+      entryModeIconColor: blackColor87,
+      cancelButtonStyle: TextButton.styleFrom(foregroundColor: blackColor87),
+      confirmButtonStyle: TextButton.styleFrom(foregroundColor: blackColor87)
+    ),
+  );
+
+  TimeOfDay selectTimeOfDay = TimeOfDay.now();
+  selectTime() async {
+    final TimeOfDay? initialTime = await showTimePicker(
+        context: context,
+        initialTime: selectTimeOfDay,
+        helpText: 'Estabelecimento Aberto das...',
+        cancelText: 'Cancelar',
+        builder: (context, child){
+          return Theme(
+              data: themeTime,
+              child: child!
+          );
+        }
+    );
+    final TimeOfDay? lastTime = await showTimePicker(
+        context: context,
+        initialTime: selectTimeOfDay,
+        helpText: 'Até as...',
+        cancelText: 'Cancelar',
+        builder: (context, child){
+          return Theme(
+              data: themeTime,
+              child: child!
+          );
+        }
+    );
+    print('$initialTime às $lastTime');
+    setState(() {time = '${initialTime.toString().replaceAll('TimeOfDay(', '').replaceAll(')', '')} às ${lastTime.toString().replaceAll('TimeOfDay(', '').replaceAll(')', '')} ';});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +241,7 @@ class _NewOfferPageState extends State<NewOfferPage> {
                                               ),
                                               onSelected: (item){
                                                 if (item == 1) {
-                                                  //_backupShare(context);
+                                                  selectTime();
                                                 }else if (item == 2) {
                                                   setState(()=> time = 'Fechado');
                                                 }

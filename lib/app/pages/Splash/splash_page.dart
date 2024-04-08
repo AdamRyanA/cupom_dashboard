@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cupom_dashboard/app/utils/utils.dart';
+import 'package:cupom_dashboard/domain/usecases/authentication.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -13,7 +14,8 @@ class _SplashPageState extends State<SplashPage> {
 
   initialLoading() {
     Timer(const Duration(seconds: 1), () {
-      Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rHome, (route) => false);
+      Authentication.checkUser(context);
+      //Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rHome, (route) => false);
     });
   }
 

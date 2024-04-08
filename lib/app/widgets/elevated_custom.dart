@@ -16,7 +16,9 @@ class ElevatedCustom extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? primaryColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))
+        shape: RoundedRectangleBorder(
+          side: foregroundColor == null ? BorderSide.none : BorderSide(width: 1.5, color: foregroundColor!),
+            borderRadius: BorderRadius.circular(14))
       ),
       child: Container(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),

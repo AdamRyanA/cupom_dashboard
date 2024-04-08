@@ -2,6 +2,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/app/widgets/widgets.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
+import 'package:cupom_dashboard/domain/usecases/authentication.dart';
 import 'package:cupom_dashboard/domain/usecases/controllers.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -28,14 +29,14 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController controllerPassword = TextEditingController();
   PasswordObscureController passwordObscureController = PasswordObscureController();
 
-  signIn(){
+  signIn() async {
     setState(() => focus = false);
     if (_formKey.currentState!.validate()) {
       Company company = Company.toNull();
       company.email = controllerEmail.text;
       company.cnpj = controllerCNPJ.text;
 
-      String? result = 'Teste'; //TODO
+      String? result = await Authentication.signInWithEmail(context: context, usuario: company, password: controllerPassword.text);
       if(result != null){
         Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyPanel, (route) => false);
       }else{
@@ -133,6 +134,7 @@ class _SignInPageState extends State<SignInPage> {
                                 controller: controllerCNPJ,
                                 hint: 'Digite seu CNPJ aqui',
                                 label: 'CNPJ',
+                              /*
                               validator: (value){
                                 if(UtilBrasilFields.isCNPJValido(controllerCNPJ.text)){
                                   return null;
@@ -145,6 +147,7 @@ class _SignInPageState extends State<SignInPage> {
                                   return 'CNPJ inválido';
                                 }
                               },
+                               */
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
                                 CnpjInputFormatter(),

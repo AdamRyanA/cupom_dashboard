@@ -1,5 +1,6 @@
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/app/widgets/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class NewOfferPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _NewOfferPageState extends State<NewOfferPage> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerCategoria = TextEditingController();
   TextEditingController controllerDescricao = TextEditingController();
-
+  
   bool twoDish = false;
   bool fiftyOff = false;
   bool dessertFree = false;
@@ -35,53 +36,75 @@ class _NewOfferPageState extends State<NewOfferPage> {
       if(n==5) thirtyOff = true;
     });
   }
-  String time = 'Fechado';
 
-  final themeTime = ThemeData(
-    timePickerTheme: TimePickerThemeData(
-      backgroundColor: whiteColor,
-      helpTextStyle: body1,
-      dialBackgroundColor: primaryLightColor,
-      dialHandColor: primaryColor,
-      inputDecorationTheme: InputDecorationTheme(
-        focusColor: Colors.greenAccent
-      ),
-      entryModeIconColor: blackColor87,
-      cancelButtonStyle: TextButton.styleFrom(foregroundColor: blackColor87),
-      confirmButtonStyle: TextButton.styleFrom(foregroundColor: blackColor87)
-    ),
-  );
-
-  TimeOfDay selectTimeOfDay = TimeOfDay.now();
+  late String timeSegunda;
+  late String timeTerca;
+  late String timeQuarta;
+  late String timeQuinta;
+  late String timeSexta;
+  late String timeSabado;
+  late String timeDomingo;
+  TimeRange? timeRange;
   selectTime() async {
-    final TimeOfDay? initialTime = await showTimePicker(
-        context: context,
-        initialTime: selectTimeOfDay,
-        helpText: 'Estabelecimento Aberto das...',
-        cancelText: 'Cancelar',
-        builder: (context, child){
-          return Theme(
-              data: themeTime,
-              child: child!
-          );
-        }
+    TimeRange? result = await showTimeRangePicker(
+      context: context,
+      start: timeRange!.startTime,
+      end: timeRange!.endTime,
+      ticks: 24,
+      ticksOffset: -12,
+      ticksLength: 15,
+      ticksColor: Colors.grey,
+      labels: [
+        "12 pm",
+        "3 am",
+        "6 am",
+        "9 am",
+        "12 pm",
+        "3 pm",
+        "6 pm",
+        "9 pm"
+      ].asMap().entries.map((e) {
+        return ClockLabel.fromIndex(
+            idx: e.key, length: 8, text: e.value);
+      }).toList(),
+      labelOffset: 35,
+      rotateLabels: false,
+      padding: 60,
+      strokeColor: blackColor60,
+      handlerColor: primaryColor,
+      selectedColor: primaryLightColor,
+      timeColor: primaryColor,
+      buttonStyle: TextButton.styleFrom(foregroundColor: blackColor87),
     );
-    final TimeOfDay? lastTime = await showTimePicker(
-        context: context,
-        initialTime: selectTimeOfDay,
-        helpText: 'Até as...',
-        cancelText: 'Cancelar',
-        builder: (context, child){
-          return Theme(
-              data: themeTime,
-              child: child!
-          );
-        }
-    );
-    print('$initialTime às $lastTime');
-    setState(() {time = '${initialTime.toString().replaceAll('TimeOfDay(', '').replaceAll(')', '')} às ${lastTime.toString().replaceAll('TimeOfDay(', '').replaceAll(')', '')} ';});
+    if (kDebugMode) {
+      print("result $result");
+    }
+    return result;
   }
 
+  initial(){
+    TimeOfDay startTime = TimeOfDay.now();
+    timeRange = TimeRange(
+        startTime: startTime,
+        endTime: TimeOfDay(hour: startTime.hour + 3, minute: startTime.minute)
+    );
+    print(timeRange);
+
+    timeSegunda = 'Fechado';
+    timeTerca = 'Fechado';
+    timeQuarta = 'Fechado';
+    timeQuinta = 'Fechado';
+    timeSexta = 'Fechado';
+    timeSabado = 'Fechado';
+    timeDomingo = 'Fechado';
+  }
+  
+  @override
+  void initState() {
+    super.initState();
+    initial();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,96 +232,131 @@ class _NewOfferPageState extends State<NewOfferPage> {
                             width: double.infinity,
                             child: Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: GestureDetector(
-                                      onTap: (){},
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Segunda-feira',
-                                            style: caption.copyWith(color: blackColor60),
-                                          ),
-                                          PopupMenuButton(
-                                              surfaceTintColor: whiteColor,
-                                              splashRadius: 0,
-                                              tooltip: '',
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    time,
-                                                    style: caption.copyWith(color: blackColor60),
-                                                  ),
-                                                  const SizedBox(width: 16),
-                                                  const Icon(
-                                                    Icons.keyboard_arrow_down_outlined,
-                                                    size: 16,
-                                                  )
-                                                ],
-                                              ),
-                                              onSelected: (item){
-                                                if (item == 1) {
-                                                  selectTime();
-                                                }else if (item == 2) {
-                                                  setState(()=> time = 'Fechado');
-                                                }
-                                              },
-                                              itemBuilder: (context) {
-                                                return [
-                                                  PopupMenuItem(
-                                                    value: 1,
-                                                    child: Text(
-                                                        'Selecionar horário',
-                                                        style: body2.copyWith(color: blackColor87)
-                                                    ),
-                                                  ),
-                                                  PopupMenuItem(
-                                                    value: 2,
-                                                    child: Text(
-                                                        'Fechado',
-                                                        style: body2.copyWith(color: blackColor87)
-                                                    ),
-                                                  ),
-                                                ];
-                                              }
-                                              ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                ListTime(
+                                  label: 'Segunda-feira',
+                                  time: timeSegunda,
+                                  onSelected: (item) async {
+                                    if (item == 1) {
+                                      TimeRange? timeRangeSelect = await selectTime();
+                                      if(timeRangeSelect != null){
+                                        timeRange = timeRangeSelect;
+                                        setState(() {
+                                          timeSegunda = '$timeRange';
+                                        });
+                                      }
+
+                                    }else if (item == 2) {
+                                      setState(()=> timeSegunda = 'Fechado');
+                                    }
+                                  },
                                 ),
                                 ListTime(
-                                    label: 'Terça-feira',
-                                    time: 'Fechado',
-                                    onTap: (){}
+                                  label: 'Terça-feira',
+                                  time: timeTerca,
+                                  onSelected: (item) async {
+                                    if (item == 1) {
+                                      TimeRange? timeRangeSelect = await selectTime();
+                                      if(timeRangeSelect != null){
+                                        timeRange = timeRangeSelect;
+                                        setState(() {
+                                          timeTerca = '$timeRange';
+                                        });
+                                      }
+
+                                    }else if (item == 2) {
+                                      setState(()=> timeTerca = 'Fechado');
+                                    }
+                                  },
                                 ),
                                 ListTime(
-                                    label: 'Quarta-feira',
-                                    time: 'Fechado',
-                                    onTap: (){}
+                                  label: 'Quarta-feira',
+                                  time: timeQuarta,
+                                  onSelected: (item) async {
+                                    if (item == 1) {
+                                      TimeRange? timeRangeSelect = await selectTime();
+                                      if(timeRangeSelect != null){
+                                        timeRange = timeRangeSelect;
+                                        setState(() {
+                                          timeQuarta = '$timeRange';
+                                        });
+                                      }
+
+                                    }else if (item == 2) {
+                                      setState(()=> timeQuarta = 'Fechado');
+                                    }
+                                  },
                                 ),
                                 ListTime(
-                                    label: 'Quinta-feira',
-                                    time: 'Fechado',
-                                    onTap: (){}
+                                  label: 'Quinta-feira',
+                                  time: timeQuinta,
+                                  onSelected: (item) async {
+                                    if (item == 1) {
+                                      TimeRange? timeRangeSelect = await selectTime();
+                                      if(timeRangeSelect != null){
+                                        timeRange = timeRangeSelect;
+                                        setState(() {
+                                          timeQuinta = '$timeRange';
+                                        });
+                                      }
+
+                                    }else if (item == 2) {
+                                      setState(()=> timeQuinta = 'Fechado');
+                                    }
+                                  },
                                 ),
                                 ListTime(
-                                    label: 'Sexta-feira',
-                                    time: 'Fechado',
-                                    onTap: (){}
+                                  label: 'Sexta-feira',
+                                  time: timeSexta,
+                                  onSelected: (item) async {
+                                    if (item == 1) {
+                                      TimeRange? timeRangeSelect = await selectTime();
+                                      if(timeRangeSelect != null){
+                                        timeRange = timeRangeSelect;
+                                        setState(() {
+                                          timeSexta = '$timeRange';
+                                        });
+                                      }
+
+                                    }else if (item == 2) {
+                                      setState(()=> timeSexta = 'Fechado');
+                                    }
+                                  },
                                 ),
                                 ListTime(
-                                    label: 'Sábado',
-                                    time: 'Fechado',
-                                    onTap: (){}
+                                  label: 'Sábado',
+                                  time: timeSabado,
+                                  onSelected: (item) async {
+                                    if (item == 1) {
+                                      TimeRange? timeRangeSelect = await selectTime();
+                                      if(timeRangeSelect != null){
+                                        timeRange = timeRangeSelect;
+                                        setState(() {
+                                          timeSabado = '$timeRange';
+                                        });
+                                      }
+
+                                    }else if (item == 2) {
+                                      setState(()=> timeSabado = 'Fechado');
+                                    }
+                                  },
                                 ),
                                 ListTime(
-                                    label: 'Domingo',
-                                    time: 'Fechado',
-                                    onTap: (){}
+                                  label: 'Domingo',
+                                  time: timeDomingo,
+                                  onSelected: (item) async {
+                                    if (item == 1) {
+                                      TimeRange? timeRangeSelect = await selectTime();
+                                      if(timeRangeSelect != null){
+                                        timeRange = timeRangeSelect;
+                                        setState(() {
+                                          timeDomingo = '$timeRange';
+                                        });
+                                      }
+
+                                    }else if (item == 2) {
+                                      setState(()=> timeDomingo = 'Fechado');
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -495,29 +553,46 @@ class ButtonCustom extends StatelessWidget {
 }
 
 class ListTime extends StatelessWidget {
-
   final String label;
   final String time;
-  final void Function() onTap;
-
-  const ListTime({Key? key, required this.label, required this.time, required this.onTap}) : super(key: key);
+  final void Function(int)? onSelected;
+  const ListTime({Key? key, required this.label, required this.time, required this.onSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: onTap,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label,
-                style: caption.copyWith(color: blackColor60),
-              ),
-              Row(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: caption.copyWith(color: blackColor60),
+          ),
+          PopupMenuButton(
+              surfaceTintColor: whiteColor,
+              splashRadius: 0,
+              tooltip: '',
+              onSelected: onSelected,
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    value: 1,
+                    child: Text(
+                        'Selecionar horário',
+                        style: body2.copyWith(color: blackColor87)
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 2,
+                    child: Text(
+                        'Fechado',
+                        style: body2.copyWith(color: blackColor87)
+                    ),
+                  ),
+                ];
+              },
+              child: Row(
                 children: [
                   Text(
                     time,
@@ -530,12 +605,10 @@ class ListTime extends StatelessWidget {
                   )
                 ],
               )
-            ],
           ),
-        ),
+        ],
       ),
     );
   }
 }
-
 

@@ -60,7 +60,7 @@ class _SignInPageState extends State<SignInPage> {
                   onTap: (){
                     Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyPanel, (route) => false);
                   },
-                  child: Icon(
+                  child: const Icon(
                       Icons.ac_unit,
                     //color: whiteColor,
                   ),

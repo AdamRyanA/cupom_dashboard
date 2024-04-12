@@ -20,8 +20,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ratatá',
-      //home: SplashPage(),
-      home: NewOfferPage(),
+      home: SplashPage(),
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
     );

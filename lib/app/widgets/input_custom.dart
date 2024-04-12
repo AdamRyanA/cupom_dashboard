@@ -64,15 +64,13 @@ class InputCustom extends StatelessWidget {
                     style: body2.copyWith(color: blackColor60),
                   ),
                 ) : null,
-                suffixIcon: suffixObscure!
-                    ? IconButton(
+                suffixIcon: suffixObscure! ? IconButton(
                   onPressed: onPressedObscure,
                   icon: Icon(
                       obscure! ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                       color: blackColor60
                   ),
-                )
-                    : null,
+                ) : null,
               ),
               validator: validator,
               onFieldSubmitted: onFieldSubmitted,

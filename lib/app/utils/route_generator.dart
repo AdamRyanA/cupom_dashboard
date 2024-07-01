@@ -1,7 +1,7 @@
 import 'package:cupom_dashboard/app/pages/Home/home_page.dart';
-import 'package:cupom_dashboard/app/pages/pages.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:flutter/material.dart';
+import '../pages/Splash/splash_page.dart';
 
 class RouteGenerator {
   static const String rSplash = '/';

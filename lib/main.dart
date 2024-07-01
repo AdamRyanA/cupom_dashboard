@@ -1,4 +1,4 @@
-import 'package:cupom_dashboard/app/pages/pages.dart';
+import 'package:cupom_dashboard/app/pages/Splash/splash_page.dart';
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +11,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Ratatá',
+      title: 'Reduu',
       //home: SplashPage(),
-      home: HomePage(),
+      home: SplashPage(),
       //initialRoute: '/',
-      initialRoute: '/home',
+      initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

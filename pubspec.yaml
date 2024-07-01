@@ -35,12 +35,15 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_fonts: ^5.1.0
+  google_fonts: ^6.2.1
   #firebase_core: ^2.24.2
   #firebase_auth: ^4.16.0
   #google_sign_in: ^6.1.6
   fluttertoast: ^8.2.4
   google_maps_flutter: ^2.5.3
+  flutter_native_splash: ^2.4.0
+  hexcolor: ^3.0.1
+  responsive_framework: ^1.4.0
   #email_validator: ^2.1.17
   #mask_text_input_formatter: ^2.9.0
 
@@ -53,7 +56,9 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
+  package_rename: ^1.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +73,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/images/
+    - assets/images/icons/
     - assets/images/logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -95,3 +102,33 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_launcher_icons:
+  web:
+    generate: true
+    image_path: "assets/images/logo/logo-ios.png"
+    background_color: "#FEC200"
+    theme_color: "#FEC200"
+  windows:
+    generate: true
+    image_path: "assets/images/logo/logo-ios.png"
+    icon_size: 48 # min:48, max:256, default: 48
+
+flutter_native_splash:
+  image: assets/images/logo/logo-ios.png
+  image_dark: assets/images/logo/logo-ios.png
+  color: "#FEC200"
+  color_dark: "#FEC200"
+
+
+package_rename_config:
+  web:
+    app_name: Reduu # (String) The title of the web app and PWA
+    short_app_name: Reduu # (String) The short display name of the PWA (Optional, defaults to app_name if not set)
+    description: Reduu - O app de experiências da sua cidade. # (String) The description of the web app and PWA
+
+    windows:
+      app_name: Reduu
+      organization: com.decampweb.cupom
+      copyright_notice: Copyright ©️ 2024 DeCampWeb. Todos os direitos reservados.# (String) The product copyright of the windows app
+      exe_name: reduu.exe

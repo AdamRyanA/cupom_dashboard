@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hexcolor/hexcolor.dart';
 
-Color primaryColor = const Color(0xffffc300);
+Color primaryColor = HexColor("#FEC200");
 Color primaryLightColor = const Color(0xffFBF7EF);
 Color whiteColor = const Color(0xffffffff);
 Color blackColor = const Color(0xff000000);

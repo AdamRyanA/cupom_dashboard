@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../pages/Auth/auth_controller.dart';
@@ -74,7 +75,7 @@ class AuthSignUpStateless extends StatelessWidget {
                       ),
 
                       ValueListenableBuilder(
-                        valueListenable: authController.email,
+                        valueListenable: authController.name,
                         builder: (_, value, __) {
                           return InputRegister(
                             colorCard: Colors.transparent,
@@ -82,7 +83,7 @@ class AuthSignUpStateless extends StatelessWidget {
                             controllerName: nameController,
                             hintText: 'Digite o nome da estabelecimento',
                             onChange: (value) {
-                              authController.email.value = value;
+                              authController.name.value = value;
                               authController.checkValidate();
                             },
                             validator: (valor) {
@@ -103,9 +104,10 @@ class AuthSignUpStateless extends StatelessWidget {
                         builder: (_, value, __) {
                           return InputRegister(
                             colorCard: Colors.transparent,
-                            texto: 'Nome da empresa',
+                            texto: 'CNPJ',
                             controllerName: docController,
-                            hintText: 'Digite o nome da empresa',
+                            hintText: 'Digite o CNPJ',
+                            keyboardType: TextInputType.number,
                             onChange: (value) {
                               authController.docNumber.value = value;
                               authController.checkValidateRegister();
@@ -117,6 +119,10 @@ class AuthSignUpStateless extends StatelessWidget {
                                 return "CNPJ Inválido";
                               }
                             },
+                            format: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CnpjInputFormatter(),
+                            ],
                             onSubmitted: (valor) {
                               onPressedElevatedButton!();
                               },
@@ -142,6 +148,35 @@ class AuthSignUpStateless extends StatelessWidget {
                                 return "Digite um E-mail válido";
                               }
                             },
+                            onSubmitted: (valor) {
+                              onPressedElevatedButton!();                  },
+                          );
+                        },
+                      ),
+                      ValueListenableBuilder(
+                        valueListenable: authController.phoneNumber,
+                        builder: (_, value, __) {
+                          return InputRegister(
+                            colorCard: Colors.transparent,
+                            texto: 'Telefone',
+                            controllerName: phoneController,
+                            hintText: 'Digite seu Telefone',
+                            keyboardType: TextInputType.number,
+                            onChange: (value) {
+                              authController.phoneNumber.value = value;
+                              authController.checkValidateRegister();
+                            },
+                            validator: (valor) {
+                              if (UtilBrasilFields.removeCaracteres(phoneController.text).length == 11) {
+                                return null;
+                              }else{
+                                return "Digite um telefone válido";
+                              }
+                            },
+                            format: [
+                              TelefoneInputFormatter(),
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             onSubmitted: (valor) {
                               onPressedElevatedButton!();                  },
                           );

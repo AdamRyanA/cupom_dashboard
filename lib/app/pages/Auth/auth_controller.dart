@@ -26,11 +26,16 @@ class AuthController {
   }
 
   checkValidateRegister() {
-    if (EmailValidator.validate(
-        email.value)
+    print(EmailValidator.validate(email.value));
+    print(name.value.length >= 3);
+    print(UtilBrasilFields.isCNPJValido(docNumber.value));
+    print(phoneNumber.value.length == 11);
+    print(password.value == confirmPassword.value);
+    if (EmailValidator.validate(email.value)
         && password.value.length >= 6
-        && name.value.length >= 3 && UtilBrasilFields.isCNPJValido(docNumber.value)
-        && UtilBrasilFields.removeCaracteres(phoneNumber.value).length == 11
+        && name.value.length >= 3
+        && UtilBrasilFields.isCNPJValido(docNumber.value)
+        && phoneNumber.value.length == 11
         && password.value == confirmPassword.value
     ) {
       if (kDebugMode) {

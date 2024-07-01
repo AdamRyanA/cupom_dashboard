@@ -1,8 +1,10 @@
+import 'package:cupom_dashboard/app/widgets/AuthSignUp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../../data/models/response_api.dart';
 import '../../../domain/usecases/Authentication.dart';
 import '../../utils/colors.dart';
 import '../../utils/paths.dart';
@@ -25,7 +27,8 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
   late Animation<double> _animationFade;
   late Animation<double> _animationSize;
 
-  bool cadastro = true;
+  bool cadastro = false;
+  bool recover = false;
   bool loading = false;
 
   bool internet = true;
@@ -37,6 +40,10 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController docController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordConfirmlController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -72,6 +79,39 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
     ));
 
     _animationController.forward();
+  }
+
+  createUser() async {
+    if (_formKey.currentState!.validate()) {
+      if (loading == false) {
+        loading = true;
+        EasyLoading.show(status: "Aguarde...");
+        ResponseAPI? responseCreateUser;
+        /*
+        ResponseAPI? responseCreateUser = await CompanyProcess.post(
+            name: nameController.text,
+            email: emailController.text,
+            password: passwordController.text
+        );
+         */
+        loading = false;
+        EasyLoading.dismiss();
+        await Authentication.signInWithEmail(
+            context: context,
+            email: _controllerEmail.text,
+            password: _controllerPassword.text
+        );
+      }else{
+        if (kDebugMode) {
+          print("Process already running");
+        }
+      }
+    }else{
+      if (kDebugMode) {
+        print("Not validate");
+      }
+    }
+
   }
 
   signInUser() async{
@@ -153,9 +193,26 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
   changeOption() {
     setState(() {
       cadastro = !cadastro;
+      recover = false;
       _controllerEmail.clear();
       _controllerPassword.clear();
+      phoneController.clear();
+      nameController.clear();
+      passwordConfirmlController.clear();
       authController.valid.value = false;
+    });
+  }
+
+  changeOptionRecover() {
+    setState(() {
+      recover = !recover;
+      cadastro = false;
+      _controllerEmail.clear();
+      _controllerPassword.clear();
+      phoneController.clear();
+      docController.clear();
+      nameController.clear();
+      passwordConfirmlController.clear();
     });
   }
 
@@ -189,14 +246,21 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                     child: largura < 760
                         ? WidgetDecision(
                         cadastro,
+                        recover,
                         loading,
                         authController,
+                        changeOptionRecover,
+                        changeOption,
+                        createUser,
                         signInUser,
                         resetPasswordUser,
-                        changeOption,
                         _formKey,
                         _controllerEmail,
                         _controllerPassword,
+                        nameController,
+                        docController,
+                        phoneController,
+                        passwordConfirmlController,
                         altura,
                         largura,
                         _animationFade
@@ -222,14 +286,21 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                               padding: const EdgeInsets.all(20),
                               child: WidgetDecision(
                                   cadastro,
+                                  recover,
                                   loading,
                                   authController,
+                                  changeOptionRecover,
+                                  changeOption,
+                                  createUser,
                                   signInUser,
                                   resetPasswordUser,
-                                  changeOption,
                                   _formKey,
                                   _controllerEmail,
                                   _controllerPassword,
+                                  nameController,
+                                  docController,
+                                  phoneController,
+                                  passwordConfirmlController,
                                   altura,
                                   largura,
                                   _animationFade
@@ -250,27 +321,43 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
 
 class WidgetDecision extends StatelessWidget {
   final bool decision;
+  final bool recover;
   final bool loading;
   final AuthController authController;
-  final void Function()? onPressed;
   final void Function()? onPressedRecover;
   final void Function()? onPressedChange;
+  final Function()? onPressedElevatedButtonCreateUser;
+  final Function()? onPressedElevatedButtonSignIn;
+  final Function()? onPressedElevatedButtonRecover;
   final Key? formKey;
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final TextEditingController nameController;
+  final TextEditingController docController;
+  final TextEditingController phoneController;
+  final TextEditingController passwordConfirmController;
   final double altura;
   final double largura;
   final Animation<double> animationFade;
+
+
   const WidgetDecision(
       this.decision,
+      this.recover,
       this.loading,
       this.authController,
-      this.onPressed,
       this.onPressedRecover,
       this.onPressedChange,
+      this.onPressedElevatedButtonCreateUser,
+      this.onPressedElevatedButtonSignIn,
+      this.onPressedElevatedButtonRecover,
       this.formKey,
       this.emailController,
       this.passwordController,
+      this.nameController,
+      this.docController,
+      this.phoneController,
+      this.passwordConfirmController,
       this.altura,
       this.largura,
       this.animationFade,
@@ -279,8 +366,47 @@ class WidgetDecision extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return decision
-        ? AuthRegister(decision, loading, authController, onPressed, onPressedChange, formKey, emailController, passwordController, altura, largura, animationFade)
-        : AuthRecover(decision, loading, authController, onPressedRecover, onPressedChange, formKey, emailController, passwordController, altura, largura, animationFade);
+    return recover ? AuthRecover(
+        decision,
+        recover,
+        loading,
+        authController,
+        onPressedElevatedButtonRecover,
+        onPressedRecover,
+        formKey,
+        emailController,
+        passwordController,
+        altura,
+        largura,
+        animationFade
+    )
+        : decision
+        ? AuthSignUpStateless(
+        onPressedChange,
+        loading,
+        formKey,
+        authController,
+        onPressedElevatedButtonCreateUser,
+        emailController,
+        passwordController,
+        nameController,
+        docController,
+        phoneController,
+        passwordConfirmController
+    )
+        : AuthRegister(
+        decision,
+        loading,
+        authController,
+        onPressedElevatedButtonSignIn,
+        onPressedRecover,
+        onPressedChange,
+        formKey,
+        emailController,
+        passwordController,
+        altura,
+        largura,
+        animationFade
+    );
   }
 }

@@ -1,10 +1,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../pages/Auth/auth_controller.dart';
 import '../utils/colors.dart';
-import '../utils/paths.dart';
 import 'InputRegister.dart';
 
 class AuthRegister extends StatelessWidget {
@@ -12,6 +13,7 @@ class AuthRegister extends StatelessWidget {
   final bool loading;
   final AuthController authController;
   final void Function()? onPressed;
+  final void Function()? onPressedRecover;
   final void Function()? onPressedChange;
   final Key? formKey;
   final TextEditingController emailController;
@@ -19,11 +21,13 @@ class AuthRegister extends StatelessWidget {
   final double altura;
   final double largura;
   final Animation<double> animationFade;
+
   const AuthRegister(
       this.decision,
       this.loading,
       this.authController,
       this.onPressed,
+      this.onPressedRecover,
       this.onPressedChange,
       this.formKey,
       this.emailController,
@@ -46,6 +50,66 @@ class AuthRegister extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Olá, faça seu login.",
+                            style: GoogleFonts.fredoka(
+                              color: blackColor,
+                              fontSize: 34,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.center,
+                            child: RichText(
+                              text: TextSpan(
+                                style: GoogleFonts.fredoka(
+                                  color: blackColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                children: [
+                                  const TextSpan(
+                                      text: "Ainda não possui uma conta? ",
+                                  ),
+                                  TextSpan(
+                                    text: "Faça seu cadastro",
+                                    style: GoogleFonts.fredoka(
+                                      color: blueColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      decoration: TextDecoration.underline
+                                    ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = onPressedChange
+                                  )
+                                ]
+                              ),
+                            )
+                          ),
+                        )
+                      ],
+                    )
+                ),
                 ValueListenableBuilder(
                   valueListenable: authController.email,
                   builder: (_, value, __) {
@@ -116,17 +180,22 @@ class AuthRegister extends StatelessWidget {
                             }
                           } : null,
                           style: ElevatedButton.styleFrom(
-                            foregroundColor: !loading ? primaryColor : blackColor,
-                            backgroundColor: !loading ? whiteColor : Colors.grey,
+                            foregroundColor: blackColor,
+                            backgroundColor: !loading ? primaryColor : Colors.grey,
                             disabledBackgroundColor: Colors.grey,
                             disabledForegroundColor: blackColor,
                           ),
-                          child: const Row(
+                          child: Row(
                               children: [
                                 Expanded(
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
-                                    child: Text("Entrar"),
+                                    child: Text("Entrar",
+                                      style: GoogleFonts.fredoka(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ]
@@ -135,26 +204,43 @@ class AuthRegister extends StatelessWidget {
                     },
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: Container()),
-                    Expanded(
-                      flex: 2,
-                      child: TextButton(
-                          onPressed: onPressedChange,
-                          child: Text(
-                            'Esqueceu a senha?',
-                            style: TextStyle(
-                                color: whiteColor
-                            ),
-                          )
-                      ),
-                    ),
-                    Expanded(
-                        child: Container()
-                    ),
-                  ],
+                Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.center,
+                              child: RichText(
+                                text: TextSpan(
+                                    style: GoogleFonts.fredoka(
+                                      color: blackColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    children: [
+                                      const TextSpan(
+                                        text: "Esqueceu a senha? ",
+                                      ),
+                                      TextSpan(
+                                          text: "Recupere a sua senha",
+                                          style: GoogleFonts.fredoka(
+                                              color: blueColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              decoration: TextDecoration.underline
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = onPressedRecover
+                                      )
+                                    ]
+                                ),
+                              )
+                          ),
+                        )
+                      ],
+                    )
                 ),
               ],
             ),

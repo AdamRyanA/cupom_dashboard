@@ -1,6 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../pages/Auth/auth_controller.dart';
 import '../utils/colors.dart';
@@ -9,10 +11,11 @@ import 'InputRegister.dart';
 
 class AuthRecover extends StatelessWidget {
   final bool decision;
+  final bool recover;
   final bool loading;
   final AuthController authController;
   final void Function()? onPressed;
-  final void Function()? onPressedChange;
+  final void Function()? onPressedRecover;
   final Key? formKey;
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -21,10 +24,11 @@ class AuthRecover extends StatelessWidget {
   final Animation<double> animationFade;
   const AuthRecover(
       this.decision,
+      this.recover,
       this.loading,
       this.authController,
       this.onPressed,
-      this.onPressedChange,
+      this.onPressedRecover,
       this.formKey,
       this.emailController,
       this.passwordController,
@@ -41,22 +45,60 @@ class AuthRecover extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          largura < 760
-              ? Expanded(
-            flex: 1,
-            child: FadeTransition(
-              opacity: animationFade,
-              child: Image.asset(ImagesPath.logo,
-                fit: BoxFit.fill,
-              ),
-            ),
-          )
-              : Container(),
           Expanded(
             flex: 1,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Recuperar senha.",
+                              style: GoogleFonts.fredoka(
+                                color: blackColor,
+                                fontSize: 34,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.center,
+                              child: RichText(
+                                text: TextSpan(
+                                    style: GoogleFonts.fredoka(
+                                      color: blackColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    children: const [
+                                      TextSpan(
+                                        text: "Um e-mail será enviado para sua conta com instruções para recuperar sua senha.",
+                                      ),
+                                    ]
+                                ),
+                              )
+                          ),
+                        )
+                      ],
+                    )
+                ),
                 ValueListenableBuilder(
                   valueListenable: authController.email,
                   builder: (_, value, __) {
@@ -120,26 +162,43 @@ class AuthRecover extends StatelessWidget {
                     },
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: Container()),
-                    Expanded(
-                      flex: 2,
-                      child: TextButton(
-                          onPressed: onPressedChange,
-                          child: Text(
-                            'Voltar para fazer login',
-                            style: TextStyle(
-                                color: whiteColor
-                            ),
-                          )
-                      ),
-                    ),
-                    Expanded(
-                        child: Container()
-                    ),
-                  ],
+                Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.center,
+                              child: RichText(
+                                text: TextSpan(
+                                    style: GoogleFonts.fredoka(
+                                      color: blackColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    children: [
+                                      const TextSpan(
+                                        text: "Esqueceu a senha? ",
+                                      ),
+                                      TextSpan(
+                                          text: "Voltar para tela de acesso",
+                                          style: GoogleFonts.fredoka(
+                                              color: blueColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              decoration: TextDecoration.underline
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = onPressedRecover
+                                      )
+                                    ]
+                                ),
+                              )
+                          ),
+                        )
+                      ],
+                    )
                 ),
               ],
             ),

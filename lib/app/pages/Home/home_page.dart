@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
 
   double n = 0.9;
 
+  var key0 = GlobalKey();
   var key1 = GlobalKey();
   var key2 = GlobalKey();
 
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Container(
+                      key: key0,
                       width: double.infinity,
                       decoration: const BoxDecoration(
                           image: DecorationImage(
@@ -57,7 +59,14 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 TextButton(
                                     style: TextButton.styleFrom(foregroundColor: primaryLightColor),
-                                    onPressed: (){},
+                                    onPressed: (){
+                                      Scrollable.ensureVisible(key0.currentContext!,
+                                          duration: const Duration(
+                                              seconds: 1
+                                          ),
+                                          curve: Curves.decelerate
+                                      );
+                                    },
                                     child: Text(
                                       'Início',
                                       style: heading6,
@@ -432,10 +441,42 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('Mapa do Site', style: heading6,),
-                              Text('Início', style: body1.copyWith(color: blackColor60)),
-                              Text('Serviços', style: body1.copyWith(color: blackColor60)),
-                              Text('Planos', style: body1.copyWith(color: blackColor60)),
-
+                              TextButton(
+                                onPressed: () {
+                                  Scrollable.ensureVisible(key0.currentContext!,
+                                      duration: const Duration(
+                                          seconds: 1
+                                      ),
+                                      curve: Curves.decelerate
+                                  );
+                                },
+                                style: TextButton.styleFrom(foregroundColor: primaryLightColor),
+                                child: Text('Início', style: body1.copyWith(color: blackColor60)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Scrollable.ensureVisible(key1.currentContext!,
+                                      duration: const Duration(
+                                          seconds: 1
+                                      ),
+                                      curve: Curves.decelerate
+                                  );
+                                },
+                                style: TextButton.styleFrom(foregroundColor: primaryLightColor),
+                                child: Text('Benefícios', style: body1.copyWith(color: blackColor60)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Scrollable.ensureVisible(key2.currentContext!,
+                                      duration: const Duration(
+                                          seconds: 1
+                                      ),
+                                      curve: Curves.decelerate
+                                  );
+                                },
+                                style: TextButton.styleFrom(foregroundColor: primaryLightColor),
+                                child: Text('Planos', style: body1.copyWith(color: blackColor60)),
+                              ),
                             ],
                           ),
                           Column(

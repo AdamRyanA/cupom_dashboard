@@ -1,4 +1,5 @@
 import 'citys.dart';
+import 'company.dart';
 import 'subscription.dart';
 import 'user_client.dart';
 
@@ -10,6 +11,8 @@ class ResponseAPI {
   List<Subscription>? subscriptions;
   Citys? city;
   List<Citys>? citys;
+  Company? company;
+  List<Company>? companys;
 
   ResponseAPI(
       this.message,
@@ -18,7 +21,9 @@ class ResponseAPI {
       this.subscription,
       this.subscriptions,
       this.city,
-      this.citys
+      this.citys,
+      this.company,
+      this.companys,
       );
 
   factory ResponseAPI.fromJson(dynamic json) {
@@ -78,6 +83,24 @@ class ResponseAPI {
       }
     }
 
+    var jsonCompany = json['company'] as Map<String, dynamic>?;
+    Company? company;
+    if (jsonCompany != null) {
+      Company companyResult = Company.fromJson(jsonCompany);
+      company = companyResult;
+    }
+
+    var jsonCompanys = json['companys'] as List<dynamic>?;
+    List<Company>? companys;
+    if (jsonCompanys != null) {
+      companys = [];
+      for (var element in jsonCompanys) {
+        var elementMap = element as Map<String, dynamic>?;
+        Company companysResult = Company.fromJson(elementMap);
+        companys.add(companysResult);
+      }
+    }
+
     return ResponseAPI(
         json["message"],
         userClient,
@@ -85,16 +108,18 @@ class ResponseAPI {
         subscription,
         subscriptions,
         city,
-        citys
+        citys,
+        company,
+        companys
     );
   }
 
   factory ResponseAPI.toNull() {
-    return ResponseAPI(null, null, null, null, null, null, null);
+    return ResponseAPI(null, null, null, null, null, null, null, null, null);
   }
 
   @override
   String toString() {
-    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys}';
+    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys}';
   }
 }

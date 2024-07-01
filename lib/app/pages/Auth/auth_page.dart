@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cupom_dashboard/app/widgets/AuthSignUp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../data/models/response_api.dart';
 import '../../../domain/usecases/Authentication.dart';
+import '../../../domain/usecases/company_process.dart';
 import '../../utils/colors.dart';
 import '../../utils/paths.dart';
 import '../../widgets/AuthRecover.dart';
@@ -86,21 +88,25 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
       if (loading == false) {
         loading = true;
         EasyLoading.show(status: "Aguarde...");
-        ResponseAPI? responseCreateUser;
-        /*
         ResponseAPI? responseCreateUser = await CompanyProcess.post(
             name: nameController.text,
-            email: emailController.text,
-            password: passwordController.text
+            email: _controllerEmail.text,
+            password: _controllerPassword.text, 
+          phone: UtilBrasilFields.removeCaracteres(phoneController.text), 
+          docNumber: UtilBrasilFields.removeCaracteres(docController.text),
         );
-         */
         loading = false;
         EasyLoading.dismiss();
-        await Authentication.signInWithEmail(
-            context: context,
-            email: _controllerEmail.text,
-            password: _controllerPassword.text
-        );
+        if (responseCreateUser != null) {
+          await Authentication.signInWithEmail(
+              context: context,
+              email: _controllerEmail.text,
+              password: _controllerPassword.text
+          );
+          Authentication.checkUser(context, false);
+        }else{
+         EasyLoading.showToast("Erro ao criar conta");
+        }
       }else{
         if (kDebugMode) {
           print("Process already running");

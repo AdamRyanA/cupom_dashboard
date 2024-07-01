@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -77,9 +78,9 @@ class AuthSignUpStateless extends StatelessWidget {
                         builder: (_, value, __) {
                           return InputRegister(
                             colorCard: Colors.transparent,
-                            texto: 'Nome da empresa',
+                            texto: 'Nome do estabelecimento',
                             controllerName: nameController,
-                            hintText: 'Digite o nome da empresa',
+                            hintText: 'Digite o nome da estabelecimento',
                             onChange: (value) {
                               authController.email.value = value;
                               authController.checkValidate();
@@ -88,7 +89,7 @@ class AuthSignUpStateless extends StatelessWidget {
                               if (nameController.text.length > 3) {
                                 return null;
                               }else{
-                                return "Digite o nome da empresa";
+                                return "Digite o nome da estabelecimento";
                               }
                             },
                             onSubmitted: (valor) {
@@ -98,22 +99,22 @@ class AuthSignUpStateless extends StatelessWidget {
                         },
                       ),
                       ValueListenableBuilder(
-                        valueListenable: authController.email,
+                        valueListenable: authController.docNumber,
                         builder: (_, value, __) {
                           return InputRegister(
                             colorCard: Colors.transparent,
                             texto: 'Nome da empresa',
-                            controllerName: nameController,
+                            controllerName: docController,
                             hintText: 'Digite o nome da empresa',
                             onChange: (value) {
-                              authController.email.value = value;
-                              authController.checkValidate();
+                              authController.docNumber.value = value;
+                              authController.checkValidateRegister();
                             },
                             validator: (valor) {
-                              if (nameController.text.length > 3) {
+                              if (UtilBrasilFields.isCNPJValido(docController.text)) {
                                 return null;
                               }else{
-                                return "Digite o nome da empresa";
+                                return "CNPJ Inválido";
                               }
                             },
                             onSubmitted: (valor) {
@@ -132,7 +133,7 @@ class AuthSignUpStateless extends StatelessWidget {
                             hintText: 'Digite seu E-mail',
                             onChange: (value) {
                               authController.email.value = value;
-                              authController.checkValidate();
+                              authController.checkValidateRegister();
                             },
                             validator: (valor) {
                               if (EmailValidator.validate(emailController.text)) {
@@ -156,7 +157,7 @@ class AuthSignUpStateless extends StatelessWidget {
                             password: true,
                             onChange: (value)  {
                               authController.password.value = value;
-                              authController.checkValidate();
+                              authController.checkValidateRegister();
                             },
                             hintText: "Digite a sua senha",
                             validator: (valor) {
@@ -177,19 +178,19 @@ class AuthSignUpStateless extends StatelessWidget {
                         builder: (_, value, __) {
                           return InputRegister(
                             colorCard: primaryColor,
-                            texto: 'Senha',
+                            texto: 'Confirme a sua Senha',
                             controllerName: passwordConfirmlController,
                             password: true,
                             onChange: (value)  {
                               authController.confirmPassword.value = value;
                               authController.checkValidateRegister();
                             },
-                            hintText: "Digite a sua senha",
+                            hintText: "Digite a confirmação da senha",
                             validator: (valor) {
-                              if (passwordConfirmlController.text.length > 6) {
+                              if (passwordConfirmlController.text.length > 6 && passwordConfirmlController.text == passwordController.text) {
                                 return null;
                               }else{
-                                return "Digite uma senha válida";
+                                return "A senha tem que ser igual nos dois campos";
                               }
                             },
                             onSubmitted: (valor) {

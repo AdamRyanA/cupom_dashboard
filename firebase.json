@@ -1,0 +1,23 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "decampweb-cupom",
+          "configurations": {
+            "web": "1:746781958067:web:fb454c5b40189e8f1335c6",
+            "windows": "1:746781958067:web:ece83e29f89aaa2e1335c6"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

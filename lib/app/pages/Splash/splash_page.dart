@@ -12,7 +12,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
 
   initialLoading() {
-    Timer(const Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 0), () {
       Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rHome, (route) => false);
     });
   }

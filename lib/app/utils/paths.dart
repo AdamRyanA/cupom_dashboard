@@ -8,3 +8,9 @@ class ImagesPath {
   static const frame509 = 'assets/images/icons/Frame509.png';
   static const frame511 = 'assets/images/icons/Frame511.png';
 }
+
+
+class UrlPaths {
+  static const googleApp = "https://play.google.com/store/apps/details?id=com.decampweb.cupom";
+  static const appleApp = "https://apps.apple.com/br/app/reduu/id6499460287";
+}

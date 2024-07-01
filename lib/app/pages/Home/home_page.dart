@@ -1,5 +1,6 @@
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/app/widgets/ResponsiveView.dart';
+import 'package:cupom_dashboard/data/helpers/launch_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveViewScaledBox(
+    return ResponsiveView(
       child: Scaffold(
         backgroundColor: primaryLightColor,
         body: LayoutBuilder(
@@ -132,7 +133,9 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         TextButton(
                                           style: TextButton.styleFrom(foregroundColor: primaryLightColor),
-                                          onPressed: (){},
+                                          onPressed: () async {
+                                            await urlLauncher(UrlPaths.googleApp);
+                                          },
                                           child: SizedBox(
                                             height: 64,
                                             width: 165,
@@ -144,7 +147,9 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         TextButton(
                                           style: TextButton.styleFrom(foregroundColor: primaryLightColor),
-                                          onPressed: (){},
+                                          onPressed: () async {
+                                            await urlLauncher(UrlPaths.appleApp);
+                                          },
                                           child: SizedBox(
                                             height: 57,
                                             width: 186,
@@ -471,7 +476,7 @@ class _HomePageState extends State<HomePage> {
 class CardCustom extends StatelessWidget {
   final IconData icon;
   final String label;
-  const CardCustom({Key? key, required this.icon, required this.label}) : super(key: key);
+  const CardCustom({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {

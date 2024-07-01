@@ -2,6 +2,7 @@ import 'package:cupom_dashboard/app/pages/Splash/splash_page.dart';
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -17,12 +18,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Reduu',
-      home: SplashPage(),
+      home: const SplashPage(),
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
+      builder: EasyLoading.init(),
     );
   }
 }

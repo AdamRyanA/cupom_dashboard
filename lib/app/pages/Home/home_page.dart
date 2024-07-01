@@ -1,6 +1,7 @@
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/app/widgets/ResponsiveView.dart';
 import 'package:cupom_dashboard/data/helpers/launch_url.dart';
+import 'package:cupom_dashboard/domain/usecases/Authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -100,7 +101,9 @@ class _HomePageState extends State<HomePage> {
                                         foregroundColor: primaryLightColor,
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
                                     ),
-                                    onPressed: (){},
+                                    onPressed: (){
+                                      Authentication.checkUser(context, true);
+                                    },
                                     child: Text(
                                       'Login parceiros',
                                       style: button.copyWith(color: blueColor),

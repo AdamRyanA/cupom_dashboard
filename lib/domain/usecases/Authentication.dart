@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cupom_dashboard/domain/usecases/company_process.dart';
 import 'package:cupom_dashboard/domain/usecases/userSubscription.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -24,11 +25,14 @@ class Authentication {
           print("usuario logado");
           print(usuarioLogado.emailVerified);
         }
-        ResponseAPI? responseAPI = await UserSubscription.get();
+        ResponseAPI? responseAPI = await CompanyProcess.get();
         ScreenArguments screenArgumentsNavigator = ScreenArguments();
-        screenArgumentsNavigator.userClient = responseAPI?.user;
-        screenArgumentsNavigator.subscription = responseAPI?.subscription;
-        Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rAuthHome, (route) => false, arguments: screenArgumentsNavigator);
+        screenArgumentsNavigator.company = responseAPI?.company;
+        if (screenArgumentsNavigator.company?.address?.city != null) {
+          Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rAuthHome, (route) => false, arguments: screenArgumentsNavigator);
+        }else{
+          Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyEdit, (route) => false, arguments: screenArgumentsNavigator);
+        }
       } else {
         if (startScreen) {
           Navigator.pushNamedAndRemoveUntil(
@@ -255,6 +259,8 @@ class Authentication {
           email: email,
           password: password
       );
+      Authentication.checkUser(context, false);
+      EasyLoading.showToast(message);
       return message;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -276,6 +282,7 @@ class Authentication {
       }
       message = e.toString();
     }
+    EasyLoading.showToast(message);
     return message;
   }
 

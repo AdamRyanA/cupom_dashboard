@@ -1,6 +1,7 @@
 import 'package:cupom_dashboard/app/pages/Auth/auth_page.dart';
 import 'package:cupom_dashboard/app/pages/Auth_Home/auth_home_page.dart';
 import 'package:cupom_dashboard/app/pages/Auth_Password/auth_password.dart';
+import 'package:cupom_dashboard/app/pages/Company_Edit/company_edit.dart';
 import 'package:cupom_dashboard/app/pages/Home/home_page.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class RouteGenerator {
   static const String rAuthRegister= '/auth';
   static const String rAuthPassword= '/auth_password';
   static const String rAuthHome= '/auth_home';
+  static const String rCompanyEdit= '/company_edit';
 
   static Route<dynamic>? generateRoute(RouteSettings settings){
     ScreenArguments? args = settings.arguments as ScreenArguments?;
@@ -27,6 +29,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AuthPassword(args));
       case rAuthHome:
         return MaterialPageRoute(builder: (_) => AuthHomePage(args));
+      case rCompanyEdit:
+        return MaterialPageRoute(builder: (_) => CompanyEdit(args));
       default:
         return _erroRoute();
     }

@@ -51,6 +51,11 @@ dependencies:
   flutter_easyloading: ^3.0.5
   brasil_fields: ^1.15.0
   panara_dialogs: ^0.1.5
+  file_picker: ^8.0.6
+  image_picker: ^1.1.2
+  font_awesome_flutter: ^10.7.0
+  dropdown_search: ^5.0.6
+  diacritic: ^0.1.5
   #email_validator: ^2.1.17
   #mask_text_input_formatter: ^2.9.0
 

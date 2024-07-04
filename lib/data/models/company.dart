@@ -1,3 +1,5 @@
+import 'package:cupom_dashboard/data/models/categorys.dart';
+
 import '../helpers/date_mongo.dart';
 import '../helpers/object_id.dart';
 import 'address.dart';
@@ -11,10 +13,12 @@ class Company{
   String? photo;
   String? name;
   String? docNumber;
+  Categorys? category;
   bool? signature;
   String? customer;
   Address? address;
   String? subscriptionId;
+  bool? enabled;
   String? created;
   String? updated;
 
@@ -28,10 +32,12 @@ class Company{
       this.photo,
       this.name,
       this.docNumber,
+      this.category,
       this.signature,
       this.customer,
       this.address,
       this.subscriptionId,
+      this.enabled,
       this.created,
       this.updated,
       );
@@ -44,6 +50,13 @@ class Company{
     if (jsonId != null) {
       String jsonResult = ObjectIdMongo.fromJson(jsonId).toString();
       id = jsonResult;
+    }
+
+    var jsonCategory = json['category'] as Map<String, dynamic>?;
+    Categorys? category;
+    if (jsonCategory != null) {
+      Categorys categoryResult = Categorys.fromJson(jsonCategory);
+      category = categoryResult;
     }
 
     var jsonAddress = json['address'] as Map<String, dynamic>?;
@@ -76,21 +89,23 @@ class Company{
         json["photo"],
         json["name"],
         json["docNumber"],
+        category,
         json["signature"],
         json["customer"],
         address,
         json["subscriptionId"],
+        json["enabled"],
         created,
         updated
     );
   }
 
   factory Company.toNull(){
-    return Company(null, null, null, null, null, null, null, null, null, null, null, null, null);
+    return Company(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
   }
 
   @override
   String toString() {
-    return '{id: $id, uid: $uid, email: $email, phone: $phone, photo: $photo, name: $name, docNumber: $docNumber, signature: $signature, customer: $customer, address: $address, subscriptionId: $subscriptionId, created: $created, updated: $updated}';
+    return '{id: $id, uid: $uid, email: $email, phone: $phone, photo: $photo, name: $name, docNumber: $docNumber, category: $category, signature: $signature, customer: $customer, address: $address, subscriptionId: $subscriptionId, enabled: $enabled, created: $created, updated: $updated}';
   }
 }

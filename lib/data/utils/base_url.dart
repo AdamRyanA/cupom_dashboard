@@ -5,4 +5,5 @@ class ApiCupomRatata {
   static String users = "${baseUrl}users";
   static String userSubscription = "${baseUrl}userSubscription/";
   static String citys = "${baseUrl}citys";
+  static String categorys = "${baseUrl}categorys";
 }

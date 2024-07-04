@@ -1,3 +1,5 @@
+import 'package:cupom_dashboard/data/models/categorys.dart';
+
 import 'citys.dart';
 import 'company.dart';
 import 'subscription.dart';
@@ -13,6 +15,8 @@ class ResponseAPI {
   List<Citys>? citys;
   Company? company;
   List<Company>? companys;
+  Categorys? category;
+  List<Categorys>? categorys;
 
   ResponseAPI(
       this.message,
@@ -24,6 +28,8 @@ class ResponseAPI {
       this.citys,
       this.company,
       this.companys,
+      this.category,
+      this.categorys,
       );
 
   factory ResponseAPI.fromJson(dynamic json) {
@@ -101,6 +107,24 @@ class ResponseAPI {
       }
     }
 
+    var jsonCategory = json['category'] as Map<String, dynamic>?;
+    Categorys? category;
+    if (jsonCategory != null) {
+      Categorys categoryResult = Categorys.fromJson(jsonCategory);
+      category = categoryResult;
+    }
+
+    var jsonCategorys = json['categorys'] as List<dynamic>?;
+    List<Categorys>? categorys;
+    if (jsonCategorys != null) {
+      categorys = [];
+      for (var element in jsonCategorys) {
+        var elementMap = element as Map<String, dynamic>?;
+        Categorys categorysResult = Categorys.fromJson(elementMap);
+        categorys.add(categorysResult);
+      }
+    }
+
     return ResponseAPI(
         json["message"],
         userClient,
@@ -110,16 +134,18 @@ class ResponseAPI {
         city,
         citys,
         company,
-        companys
+        companys,
+        category,
+        categorys
     );
   }
 
   factory ResponseAPI.toNull() {
-    return ResponseAPI(null, null, null, null, null, null, null, null, null);
+    return ResponseAPI(null, null, null, null, null, null, null, null, null, null, null);
   }
 
   @override
   String toString() {
-    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys}';
+    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys, category: $category, categorys: $categorys}';
   }
 }

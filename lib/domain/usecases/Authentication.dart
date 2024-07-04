@@ -260,7 +260,7 @@ class Authentication {
           password: password
       );
       Authentication.checkUser(context, false);
-      EasyLoading.showToast(message);
+      EasyLoading.showToast("Autenticação bem sucedida!");
       return message;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

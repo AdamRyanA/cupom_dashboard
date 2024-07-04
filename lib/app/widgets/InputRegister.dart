@@ -14,8 +14,7 @@ class InputRegister extends StatelessWidget {
   TextInputType keyboardType;
   Color buttonBackground;
   String? Function(String?)? validator;
-  IconData? prefixIcon;
-  String prefix;
+  Widget? prefixIcon;
   TextEditingController? controllerName = TextEditingController();
   List<TextInputFormatter>? format;
   void Function(String)? onChange;
@@ -40,7 +39,6 @@ class InputRegister extends StatelessWidget {
     this.textCapitalizationTrue = false,
     this.format,
     this.prefixIcon,
-    this.prefix = "",
     this.keyboardType = TextInputType.text,
     this.validator,
     this.onChange,
@@ -99,6 +97,7 @@ class InputRegister extends StatelessWidget {
                 maxLines: maxLines,
                 decoration: InputDecoration(
                   errorText: onError,
+                  prefix: prefixIcon,
                   contentPadding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                   hintText: hintText,
                   enabled: enabled,

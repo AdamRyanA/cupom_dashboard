@@ -8,11 +8,13 @@ class CustomElevatedButton extends StatelessWidget {
   final String text;
   final void Function()? onPressed;
   final bool loading;
+  final Color background;
 const CustomElevatedButton({
   super.key,
   required this.text,
   this.onPressed,
   this.loading = false,
+  required this.background,
 });
 
   @override
@@ -24,7 +26,7 @@ const CustomElevatedButton({
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             foregroundColor: blackColor,
-            backgroundColor: !loading ? primaryColor : Colors.grey,
+            backgroundColor: !loading ? background : Colors.grey,
             disabledBackgroundColor: Colors.grey,
             disabledForegroundColor: blackColor,
           ),
@@ -33,7 +35,7 @@ const CustomElevatedButton({
                 Expanded(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text("Entrar",
+                    child: Text(text,
                       style: GoogleFonts.fredoka(
                           fontWeight: FontWeight.w500,
                           fontSize: 18

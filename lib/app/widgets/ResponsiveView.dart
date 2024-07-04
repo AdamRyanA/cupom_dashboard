@@ -4,23 +4,32 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 class ResponsiveView extends StatelessWidget {
   final Widget child;
-  const ResponsiveView({super.key, required this.child});
+  final void Function()? onTap;
+  const ResponsiveView({super.key, required this.child, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        var width = constraints.maxWidth;
-        if (width > 1200) {
-          return ResponsiveViewMaxWidthBox(
-            child: child,
-          );
-        }else{
-          return ResponsiveViewScaledBox(
-            child: child,
-          );
+    return GestureDetector(
+      onTap: onTap ?? () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
         }
       },
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          var width = constraints.maxWidth;
+          if (width > 1200) {
+            return ResponsiveViewMaxWidthBox(
+              child: child,
+            );
+          }else{
+            return ResponsiveViewScaledBox(
+              child: child,
+            );
+          }
+        },
+      ),
     );
   }
 }

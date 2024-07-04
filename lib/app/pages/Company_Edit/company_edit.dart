@@ -46,12 +46,13 @@ class _CompanyEditState extends State<CompanyEdit> {
   TextEditingController controllerDocNumber = TextEditingController();
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   Uint8List? _imageBase64;
 
   bool loading = false;
 
-  Address address = Address.toNull();
+  Address? address;
 
   Categorys? selectCategory;
 
@@ -79,6 +80,7 @@ class _CompanyEditState extends State<CompanyEdit> {
       controllerDocNumber.text = widget.screenArguments?.company?.docNumber ?? "";
       if(widget.screenArguments?.company?.address != null) {
         address = widget.screenArguments!.company!.address!;
+        addressController.text = widget.screenArguments?.company?.address?.addressLine1 ?? "";
       }
       if (widget.screenArguments?.company?.photo != null) {
         _imageBase64 = await PickerImage.loadImageFromNetwork("${widget.screenArguments?.company?.photo}");
@@ -105,7 +107,7 @@ class _CompanyEditState extends State<CompanyEdit> {
       phone: UtilBrasilFields.removeCaracteres(phoneController.text),
       docNumber: UtilBrasilFields.removeCaracteres(controllerDocNumber.text),
       category: "",
-      address: address,
+      address: address!,
       photo: _imageBase64 == null ? null : PickerImage.convertUint8ListToBase64(_imageBase64!),
     );
     EasyLoading.dismiss();
@@ -232,27 +234,32 @@ class _CompanyEditState extends State<CompanyEdit> {
                                   });
                                 }
                               },
-                              child: CircleAvatar(
-                                radius: 100,
-                                backgroundColor: Colors.grey,
-                                backgroundImage: _imageBase64 == null
-                                    ? null
-                                    : MemoryImage(_imageBase64!),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: _imageBase64 == null
-                                      ? const Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.add_a_photo,
-                                        size: 80,
-                                        color: Colors.white,
-                                      ),
-                                    ],
-                                  )
-                                      : Container(),
+                              child: Container(
+                                width: 200, // Width of the container
+                                height: 200, // Height of the container
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  image: _imageBase64 == null
+                                      ? null
+                                      : DecorationImage(
+                                    image: MemoryImage(_imageBase64!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20), // Adjust this value for rounded corners
                                 ),
-                              )
+                                child: _imageBase64 == null
+                                    ? const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.add_a_photo,
+                                      size: 80,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                )
+                                    : null,
+                              ),
                           ),
                         )
                             : Column(
@@ -262,21 +269,26 @@ class _CompanyEditState extends State<CompanyEdit> {
                               child: Stack(
                                 children: [
                                   Positioned(
-                                    child: CircleAvatar(
-                                      radius: 70,
-                                      backgroundColor: Colors.grey,
-                                      backgroundImage: _imageBase64 == null
-                                          ? null
-                                          : MemoryImage(_imageBase64!),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                        child: _imageBase64 == null
-                                            ? const Icon(FontAwesomeIcons.userLarge,
-                                          size: 50,
-                                          color: Colors.white,
-                                        )
-                                            : Container(),
+                                    child: Container(
+                                      width: 140, // Width of the container
+                                      height: 140, // Height of the container
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        image: _imageBase64 == null
+                                            ? null
+                                            : DecorationImage(
+                                          image: MemoryImage(_imageBase64!),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.circular(20), // Adjust this value for rounded corners
                                       ),
+                                      child: _imageBase64 == null
+                                          ? const Icon(
+                                        FontAwesomeIcons.userLarge,
+                                        size: 50,
+                                        color: Colors.white,
+                                      )
+                                          : null,
                                     ),
                                   ),
                                   _imageBase64 != null ? Positioned(
@@ -317,6 +329,7 @@ class _CompanyEditState extends State<CompanyEdit> {
                                           });
                                         }
                                       },
+                                      background: whiteColor,
                                       text: "Câmera",
                                     ),
                                   ),
@@ -334,6 +347,7 @@ class _CompanyEditState extends State<CompanyEdit> {
                                           });
                                         }
                                       },
+                                      background: whiteColor,
                                       text: "Galeria",
                                     ),
                                   ),
@@ -418,8 +432,24 @@ class _CompanyEditState extends State<CompanyEdit> {
                             save(context);
                           },
                         ),
-                        const SizedBox(
-                          height: 8,
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: SizedBox(
+                            width: 300,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Categoria",
+                                style: GoogleFonts.fredoka(
+                                  color: blackColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
                         ),
                         SizedBox(
                           width: 300,
@@ -485,6 +515,94 @@ class _CompanyEditState extends State<CompanyEdit> {
                         const SizedBox(
                           height: 8,
                         ),
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: SizedBox(
+                            width: 300,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Endereço",
+                                      style: GoogleFonts.fredoka(
+                                        color: blackColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: CustomElevatedButton(
+                                    onPressed: () async {
+                                      ScreenArguments? screenAddress = ScreenArguments();
+                                      screenAddress.address = address;
+                                      ScreenArguments? screenResult = await Navigator.pushNamed(context, RouteGenerator.rCompanyAddress, arguments: screenAddress);
+                                      if (screenResult != null) {
+                                        if (screenResult.address != null) {
+                                          setState(() {
+                                            address = screenResult.address;
+                                          });
+                                        }
+                                      }
+                                    },
+                                    text: address?.city != null ? "Alterar" : "Adicionar",
+                                    background: whiteColor,
+                                  ),
+                                )
+                              ],
+                            )
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: SizedBox(
+                            width: 300,
+                            child: Semantics(
+                              label: "Endereço",
+                              hint: "Preencha o endereço do estabelecimento",
+                              textField: true,
+                              child: TextFormField(
+                                controller: addressController,
+                                autofocus: false,
+                                keyboardType: TextInputType.text,
+                                style: const TextStyle(fontSize: 12),
+                                validator: (value) {
+                                  if (address?.city == null) {
+                                    return "Preencha o endereço do estabelecimento";
+                                  }
+                                  return null;
+                                },
+                                onFieldSubmitted: (submitted) {
+                                  save(context);
+                                },
+                                maxLines: 6,
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                                  hintText: "Preencha o endereço do estabelecimento",
+                                  enabled: false,
+                                  filled: true,
+                                  fillColor: whiteColor,
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      borderSide: BorderSide(color: whiteColor)
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      borderSide: BorderSide(color: primaryColor)
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         SizedBox(
                           width: 300,
                           child: Row(
@@ -505,12 +623,13 @@ class _CompanyEditState extends State<CompanyEdit> {
                                       }
                                     }
                                   },
+                                  background: whiteColor,
                                   text: "Salvar",
                                 ),
                               )
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

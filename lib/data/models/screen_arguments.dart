@@ -1,3 +1,4 @@
+import 'address.dart';
 import 'company.dart';
 import 'restaurant.dart';
 import 'subscription.dart';
@@ -8,8 +9,7 @@ class ScreenArguments {
   UserClient? userClient;
   Subscription? subscription;
   Company? company;
-
-
+  Address? address;
 
   ScreenArguments();
 }

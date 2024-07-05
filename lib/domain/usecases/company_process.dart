@@ -39,7 +39,7 @@ class CompanyProcess {
     FirebaseAuth user = Authentication.auth;
     String? uid = user.currentUser?.uid;
 
-    if (uid == null) {
+    if (uid != null) {
       String url = "${ApiCupomRatata.company}new";
       if (kDebugMode) {
         print(url);
@@ -75,7 +75,7 @@ class CompanyProcess {
     FirebaseAuth user = Authentication.auth;
     String? uid = user.currentUser?.uid;
 
-    if (uid == null) {
+    if (uid != null) {
       String url = "${ApiCupomRatata.company}new";
       if (kDebugMode) {
         print(url);
@@ -101,6 +101,9 @@ class CompanyProcess {
         "placeId": address.placeId,
         "photo": photo,
       };
+      if (kDebugMode) {
+        print(data);
+      }
       ResponseAPI? responseResult = await DioHelper.put(url: url, data: data);
       return responseResult;
     }else{

@@ -67,6 +67,9 @@ class DioHelper {
           url,
           data: data
       );
+      if (kDebugMode) {
+        print(response.data);
+      }
       if (response.statusCode == 200 || response.statusCode == 201){
         var jsonData = response.data;
         ResponseAPI responseResult = ResponseAPI.fromJson(jsonData);

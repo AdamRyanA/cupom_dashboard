@@ -26,12 +26,22 @@ class Authentication {
           print(usuarioLogado.emailVerified);
         }
         ResponseAPI? responseAPI = await CompanyProcess.get();
-        ScreenArguments screenArgumentsNavigator = ScreenArguments();
-        screenArgumentsNavigator.company = responseAPI?.company;
-        if (screenArgumentsNavigator.company?.address?.city != null) {
-          Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rAuthHome, (route) => false, arguments: screenArgumentsNavigator);
+        if (responseAPI != null) {
+          ScreenArguments screenArgumentsNavigator = ScreenArguments();
+          screenArgumentsNavigator.company = responseAPI?.company;
+          if (screenArgumentsNavigator.company?.address?.city == null) {
+            Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyEdit, (route) => false, arguments: screenArgumentsNavigator);
+          }else if (screenArgumentsNavigator.company?.enabled == false){
+            Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyReview, (route) => false, arguments: screenArgumentsNavigator);
+          }else{
+            Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rAuthHome, (route) => false, arguments: screenArgumentsNavigator);
+          }
         }else{
-          Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rCompanyEdit, (route) => false, arguments: screenArgumentsNavigator);
+          EasyLoading.showToast("Erro ao autenticar... Tente novamente mais tarde");
+          if (startScreen) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, RouteGenerator.rAuth, (_) => false);
+          }
         }
       } else {
         if (startScreen) {

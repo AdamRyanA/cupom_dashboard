@@ -8,9 +8,9 @@ class MapsStrings {
     String result = "Estrada desconhecida";
     if (text != null) {
       if (text.addressLine1 != null) {
-        result = "${text.addressLine2}";
+        result = "${text.addressLine1}";
       }else{
-        result = "${text.street}, ${text.number ?? ""}, ${text.city}";
+        result = "${text.addressLine2}";
       }
     }
     return result;
@@ -70,7 +70,10 @@ class MapsStrings {
   static Address placesSearchtoMapModel(PlaceDetails placesSearchResult) {
 
     Address mapModel = MapsStrings.toAddressMap(placesSearchResult.addressComponents);;
+    mapModel.addressLine1 = placesSearchResult.formattedAddress;
+    mapModel.addressLine2 = placesSearchResult.formattedAddress;
     mapModel.placeId = placesSearchResult.placeId;
+    mapModel.coordinates = MapsStrings.geometryToLatLnt(placesSearchResult.geometry);
     return mapModel;
   }
 

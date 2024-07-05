@@ -3,6 +3,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 Color primaryColor = HexColor("#FEC200");
 Color primaryLightColor = const Color(0xffFBF7EF);
+Color greyColorText = HexColor("#000000");
 Color whiteColor = const Color(0xffffffff);
 Color blackColor = const Color(0xff000000);
 Color blackColor60 = const Color(0xff000000).withOpacity(0.6);

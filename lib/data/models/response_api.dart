@@ -1,9 +1,11 @@
 import 'package:cupom_dashboard/data/models/categorys.dart';
+import 'package:flutter_google_maps_webservices/places.dart';
 
 import 'citys.dart';
 import 'company.dart';
 import 'subscription.dart';
 import 'user_client.dart';
+
 
 class ResponseAPI {
   String? message;
@@ -17,6 +19,7 @@ class ResponseAPI {
   List<Company>? companys;
   Categorys? category;
   List<Categorys>? categorys;
+  List<Prediction>? predictions;
 
   ResponseAPI(
       this.message,
@@ -30,6 +33,7 @@ class ResponseAPI {
       this.companys,
       this.category,
       this.categorys,
+      this.predictions,
       );
 
   factory ResponseAPI.fromJson(dynamic json) {
@@ -125,6 +129,20 @@ class ResponseAPI {
       }
     }
 
+    var jsonPredictions = json['predictions'] as List<dynamic>?;
+    List<Prediction>? predictions;
+    if (jsonPredictions != null) {
+      predictions = [];
+      for (var element in jsonPredictions) {
+        if (element != null) {
+          var elementMap = element as Map<String, dynamic>;
+          Prediction predictionsResult = Prediction.fromJson(elementMap);
+          predictions.add(predictionsResult);
+        }
+      }
+      predictions.removeWhere((element) => element.placeId == null);
+    }
+
     return ResponseAPI(
         json["message"],
         userClient,
@@ -136,16 +154,17 @@ class ResponseAPI {
         company,
         companys,
         category,
-        categorys
+        categorys,
+        predictions
     );
   }
 
   factory ResponseAPI.toNull() {
-    return ResponseAPI(null, null, null, null, null, null, null, null, null, null, null);
+    return ResponseAPI(null, null, null, null, null, null, null, null, null, null, null, null);
   }
 
   @override
   String toString() {
-    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys, category: $category, categorys: $categorys}';
+    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys, category: $category, categorys: $categorys, predictions: $predictions}';
   }
 }

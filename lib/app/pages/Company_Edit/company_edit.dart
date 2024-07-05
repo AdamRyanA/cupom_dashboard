@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:cupom_dashboard/app/pages/Company_Address/company_address_page.dart';
 import 'package:cupom_dashboard/app/utils/utils.dart';
+import 'package:cupom_dashboard/data/helpers/maps_string.dart';
 import 'package:cupom_dashboard/data/models/address.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:cupom_dashboard/domain/usecases/company_process.dart';
@@ -106,14 +108,14 @@ class _CompanyEditState extends State<CompanyEdit> {
       email: controllerEmail.text,
       phone: UtilBrasilFields.removeCaracteres(phoneController.text),
       docNumber: UtilBrasilFields.removeCaracteres(controllerDocNumber.text),
-      category: "",
+      category: "${selectCategory?.id}",
       address: address!,
       photo: _imageBase64 == null ? null : PickerImage.convertUint8ListToBase64(_imageBase64!),
     );
     EasyLoading.dismiss();
     if (responseResult != null) {
       EasyLoading.showToast("Atualizado empresa");
-      if (widget.screenArguments?.company?.address == null) {
+      if (widget.screenArguments?.company?.address?.city == null) {
         Authentication.checkUser(context, true);
       }else{
         Navigator.pop(context);
@@ -485,7 +487,6 @@ class _CompanyEditState extends State<CompanyEdit> {
                                     borderSide: const BorderSide(color: Colors.red)
                                 ),
                                 //labelStyle: paragraphXS.apply(fontSizeDelta: 3),
-                                labelText: "Categoria",
                                 labelStyle: TextStyle(
                                     color: blackColor
                                 ),
@@ -541,13 +542,16 @@ class _CompanyEditState extends State<CompanyEdit> {
                                     onPressed: () async {
                                       ScreenArguments? screenAddress = ScreenArguments();
                                       screenAddress.address = address;
-                                      ScreenArguments? screenResult = await Navigator.pushNamed(context, RouteGenerator.rCompanyAddress, arguments: screenAddress);
-                                      if (screenResult != null) {
-                                        if (screenResult.address != null) {
-                                          setState(() {
-                                            address = screenResult.address;
-                                          });
-                                        }
+                                      Address? addressResult = await Navigator.push(context, MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                            return CompanyAddressPage(screenAddress);
+                                          })
+                                      );
+                                      if (addressResult != null) {
+                                        setState(() {
+                                          address = addressResult;
+                                          addressController.text = MapsStrings.addressFormattedAll(address);
+                                        });
                                       }
                                     },
                                     text: address?.city != null ? "Alterar" : "Adicionar",

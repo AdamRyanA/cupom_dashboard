@@ -2,14 +2,12 @@ import 'package:cupom_dashboard/app/utils/colors.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/helpers/maps_string.dart';
 import '../../../data/models/address.dart';
-import '../../../data/models/response_api.dart';
 import '../../../domain/usecases/mapsProcess.dart';
 import '../../widgets/ResponsiveView.dart';
 import '../../widgets/custom_elevated_button.dart';
@@ -28,10 +26,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
 
   bool loadingSearch = false;
 
-  var uuid = Uuid();
-
-
-  int indexSearchLocation = 1;
+  var uuid = const Uuid();
 
   List<Prediction> locationsSearch = [];
 
@@ -43,7 +38,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
 
   updateLocation() {
 
-    if (widget.screenArguments?.address != null) {
+    if (widget.screenArguments?.address?.city != null) {
       setState(() {
         address = widget.screenArguments?.address;
       });
@@ -78,12 +73,12 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
   Widget build(BuildContext context) {
     return ResponsiveView(
       onTap: () {
-        int index = 0;
-        controller.text = MapsStrings.addressFormattedAll(address);
+        if (address != null) {
+          controller.text = MapsStrings.addressFormattedAll(address);
+        }
         setState(() {
           searchEnabled = false;
           locationsSearch = [];
-          indexSearchLocation = 0;
         });
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus) {
@@ -94,7 +89,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
         builder: (BuildContext context, BoxConstraints constraints) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: whiteColor,
+              backgroundColor: primaryColor,
               centerTitle: true,
               title: FittedBox(
                 fit: BoxFit.scaleDown,
@@ -102,6 +97,7 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                   "Selecionar endereço",
                   style: GoogleFonts.fredoka(
                     fontSize: 28,
+                    fontWeight: FontWeight.w500
                   ),
                 ),
               ),
@@ -145,21 +141,12 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                                         if (controller.text != "" && controller.text.length > 3) {
                                           loadingSearch = false;
                                           List<Prediction> result = [];
-                                          if (address == null) {
-                                            result = await MapsProcess.googleMapsPlaceSearch(
-                                              controller.text,
-                                              null,
-                                              sessionToken ?? "",
-                                              //widget.screenArguments?.location,
-                                            );
-                                          }else{
-                                            result = await MapsProcess.googleMapsPlaceSearch(
-                                              controller.text,
-                                              null,
-                                              sessionToken ?? "",
-                                              //widget.screenArguments?.location,
-                                            );
-                                          }
+                                          result = await MapsProcess.googleMapsPlaceSearch(
+                                            controller.text,
+                                            null,
+                                            sessionToken ?? "",
+                                            //widget.screenArguments?.location,
+                                          );
                                           if (loadingSearch == false) {
                                             locationsSearch = result;
                                           }
@@ -172,8 +159,8 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
                                             locationsSearch = [];
                                           });
                                         }
-
                                       },
+                                      maxLines: 2,
                                       decoration: InputDecoration(
                                         hintText: "Qual é o endereço?",
                                         labelText: "Endereço",
@@ -251,13 +238,15 @@ class _CompanyAddressPageState extends State<CompanyAddressPage> {
             bottomNavigationBar: !searchEnabled && address != null
                 ? SafeArea(
               child: Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CustomElevatedButton(
                         onPressed: () async {
-
+                          if (address != null) {
+                            Navigator.pop(context, address);
+                          }
                         },
                         background: primaryColor,
                         text: "Confirmar",

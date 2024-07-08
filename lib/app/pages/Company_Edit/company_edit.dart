@@ -115,11 +115,7 @@ class _CompanyEditState extends State<CompanyEdit> {
     EasyLoading.dismiss();
     if (responseResult != null) {
       EasyLoading.showToast("Atualizado empresa");
-      if (widget.screenArguments?.company?.address?.city == null) {
-        Authentication.checkUser(context, true);
-      }else{
-        Navigator.pop(context);
-      }
+      Authentication.checkUser(context, true);
     }else{
       EasyLoading.showToast("Erro ao salvar empresa");
     }

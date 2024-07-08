@@ -5,6 +5,7 @@ import 'package:cupom_dashboard/app/pages/Company_Address/company_address_page.d
 import 'package:cupom_dashboard/app/pages/Company_Edit/company_edit.dart';
 import 'package:cupom_dashboard/app/pages/Company_Review/company_review_page.dart';
 import 'package:cupom_dashboard/app/pages/Home/home_page.dart';
+import 'package:cupom_dashboard/app/pages/Offer/offer_page.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:flutter/material.dart';
 import '../pages/Splash/splash_page.dart';
@@ -19,6 +20,7 @@ class RouteGenerator {
   static const String rCompanyEdit= '/company_edit';
   static const String rCompanyAddress= '/company_address';
   static const String rCompanyReview= '/company_review';
+  static const String rOfferPage= '/offer_page';
 
   static Route<dynamic>? generateRoute(RouteSettings settings){
     ScreenArguments? args = settings.arguments as ScreenArguments?;
@@ -39,6 +41,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => CompanyAddressPage(args));
       case rCompanyReview:
         return MaterialPageRoute(builder: (_) => CompanyReviewPage(args));
+      case rOfferPage:
+        return MaterialPageRoute(builder: (_) => OfferPage(args));
       default:
         return _erroRoute();
     }

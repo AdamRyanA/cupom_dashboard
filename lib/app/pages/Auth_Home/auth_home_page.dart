@@ -1,5 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cupom_dashboard/app/utils/route_generator.dart';
+import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -240,13 +242,29 @@ class _AuthHomePageState extends State<AuthHomePage> {
                                                     children: [
                                                       Expanded(
                                                         child: ListTile(
-                                                          title: Text(
-                                                            "Informações da Conta",
-                                                            style: GoogleFonts.fredoka(
-                                                              color: blackColor,
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w500,
-                                                            ),
+                                                          title: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: Text(
+                                                                  "Informações da Conta",
+                                                                  style: GoogleFonts.fredoka(
+                                                                    color: blackColor,
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              IconButton(
+                                                                  onPressed: () {
+                                                                    ScreenArguments? screenArgumentsNavigator = widget.screenArguments;
+                                                                    Navigator.pushNamed(context, RouteGenerator.rCompanyEdit, arguments: screenArgumentsNavigator);
+                                                                  },
+                                                                  icon: Icon(
+                                                                      FontAwesomeIcons.edit,
+                                                                    color: blackColor,
+                                                                  )
+                                                              )
+                                                            ],
                                                           ),
                                                           tileColor: greyListTile,
                                                         ),
@@ -427,7 +445,9 @@ class _AuthHomePageState extends State<AuthHomePage> {
                                                         trailing: TextButton.icon(
                                                           onPressed: () {
                                                             if (widget.screenArguments?.company?.enabled == true) {
+                                                              ScreenArguments? screenArgumentsNavigator = widget.screenArguments;
 
+                                                              Navigator.pushNamed(context, RouteGenerator.rOfferPage, arguments: screenArgumentsNavigator);
                                                             }else{
                                                               PanaraInfoDialog.show(context,
                                                                   message: "Sua empresa ainda não foi aprovada. Aguarde a aprovação para adicionar ofertas.",

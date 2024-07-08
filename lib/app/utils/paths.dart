@@ -1,6 +1,7 @@
 class ImagesPath {
   static const logo = 'assets/images/logo/logo-ios.png';
   static const background = 'assets/images/icons/background.png';
+  static const background2 = 'assets/images/icons/background2.png';
   static const appStore = 'assets/images/icons/appStore.png';
   static const googlePlay = 'assets/images/icons/googlePlay.png';
   static const smartphone = 'assets/images/icons/smartphone.png';

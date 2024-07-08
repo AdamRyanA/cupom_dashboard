@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupom_dashboard/app/widgets/custom_elevated_button.dart';
@@ -5,6 +7,7 @@ import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../data/helpers/picker_image.dart';
 import '../../utils/colors.dart';
 import '../../utils/paths.dart';
 import '../../widgets/ResponsiveView.dart';
@@ -25,6 +28,8 @@ class _OfferPageState extends State<OfferPage> {
   TextEditingController offerName = TextEditingController();
   TextEditingController categoryOffer = TextEditingController();
   TextEditingController descriptionOffer = TextEditingController();
+
+  Uint8List? _imageBase64;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -118,35 +123,46 @@ class _OfferPageState extends State<OfferPage> {
                                                   ),
                                                   semanticContainer: true,
                                                   clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: "${widget.screenArguments?.company?.photo}",
-                                                    imageBuilder: (context, imageProvider) => GestureDetector(
-                                                      onTap: () {
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      if (_imageBase64 != null) {
                                                         Navigator.push(context, MaterialPageRoute(
                                                             builder: (BuildContext context) {
                                                               return FullScreenImage(
                                                                 initialIndex: 0,
-                                                                images: ["${widget.screenArguments?.company?.photo}"],
+                                                                imagesUint8List: [_imageBase64!],
+                                                                images: [],
                                                               );
                                                             })
                                                         );
-                                                      },
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                          image: DecorationImage(
-                                                              image: imageProvider,
-                                                              fit: BoxFit.cover
-                                                          ),
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      height: 180,
+                                                      width: 180,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey,
+                                                        image: _imageBase64 == null
+                                                            ? null
+                                                            : DecorationImage(
+                                                          image: MemoryImage(_imageBase64!),
+                                                          fit: BoxFit.cover,
                                                         ),
+                                                        borderRadius: BorderRadius.circular(20), // Adjust this value for rounded corners
                                                       ),
+                                                      child: _imageBase64 == null
+                                                          ? const Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.add_a_photo,
+                                                            size: 80,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ],
+                                                      ) : null,
                                                     ),
-                                                    fit: BoxFit.fitWidth,
-                                                    width: 180,
-                                                    height: 180,
-                                                    errorWidget: (context, url, error) => const Icon(
-                                                      FontAwesomeIcons.building,
-                                                    ),
-                                                  )
+                                                  ),
                                               ),
                                               Expanded(
                                                   child: Container()
@@ -159,42 +175,55 @@ class _OfferPageState extends State<OfferPage> {
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
-                                                  child: Text(
-                                                    "${widget.screenArguments?.company?.name}",
-                                                    style: GoogleFonts.fredoka(
-                                                      fontWeight: FontWeight.w400,
-                                                      fontSize: 24,
+                                                  child: Container()
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: ElevatedButton(
+                                                    onPressed: () async {
+                                                      Uint8List? resultUint8List;
+                                                      resultUint8List = await PickerImage.getImage("galeria");
+                                                      if (resultUint8List != null) {
+                                                        setState(() {
+                                                          _imageBase64 = resultUint8List;
+                                                        });
+                                                      }
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                        shape: RoundedRectangleBorder(
+                                                            side: BorderSide(color: blackColor)
+                                                        ),
+                                                        elevation: 0
                                                     ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          FontAwesomeIcons.upload,
+                                                          color: blackColor,
+                                                        ),
+                                                        Expanded(
+                                                          child: FittedBox(
+                                                            fit: BoxFit.scaleDown,
+                                                            child: Text(
+                                                              "Trocar Imagem",
+                                                              style: GoogleFonts.fredoka(
+                                                                fontWeight: FontWeight.w400,
+                                                                fontSize: 16,
+                                                              ),
+                                                              textAlign: TextAlign.center,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
                                                 ),
-                                              )
+                                              ),
+                                              Expanded(
+                                                  child: Container()
+                                              ),
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
-                                                  child: Text(
-                                                    "CNPJ: ${UtilBrasilFields.obterCnpj("${widget.screenArguments?.company?.docNumber}")}",
-                                                    style: GoogleFonts.fredoka(
-                                                        fontWeight: FontWeight.w400,
-                                                        fontSize: 16,
-                                                        color: greyColorText
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        )
                                       ],
                                     ),
                                   ),
@@ -221,6 +250,7 @@ class _OfferPageState extends State<OfferPage> {
                               Expanded(
                                 child: Row(
                                   children: [
+                                    /*
                                     Expanded(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -392,6 +422,7 @@ class _OfferPageState extends State<OfferPage> {
                                           ],
                                         )
                                     ),
+                                     */
                                     const SizedBox(
                                       width: 16,
                                     ),

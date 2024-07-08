@@ -12,7 +12,10 @@ class FullScreenImage extends StatefulWidget {
   final int initialIndex;
   final List<String> images;
   final List<Uint8List>? imagesUint8List;
-  const FullScreenImage({required this.initialIndex, required this.images, this.imagesUint8List, super.key});
+  const FullScreenImage({
+    required this.initialIndex,
+    required this.images,
+    this.imagesUint8List, super.key});
 
   @override
   State<FullScreenImage> createState() => _FullScreenImageState();

@@ -7,7 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:time_range_picker/time_range_picker.dart';
 import '../../../data/helpers/picker_image.dart';
+import '../../../data/helpers/time_range_convert.dart';
 import '../../../data/models/response_api.dart';
 import '../../utils/colors.dart';
 import '../../utils/paths.dart';
@@ -34,6 +36,22 @@ class _OfferPageState extends State<OfferPage> {
 
   List<TypeOffer> typeOffers = [];
   TypeOffer? selectTypeOffers;
+
+  GlobalKey keyMonday = GlobalKey();
+  GlobalKey keyTuesday = GlobalKey();
+  GlobalKey keyWednesday = GlobalKey();
+  GlobalKey keyThursday = GlobalKey();
+  GlobalKey keyFriday = GlobalKey();
+  GlobalKey keySaturday = GlobalKey();
+  GlobalKey keySunday = GlobalKey();
+
+  TimeRange? monday = TimeRange(startTime: const TimeOfDay(hour: 11, minute: 30), endTime: const TimeOfDay(hour: 22, minute: 00));
+  TimeRange? tuesday = TimeRange(startTime: const TimeOfDay(hour: 11, minute: 30), endTime: const TimeOfDay(hour: 22, minute: 00));
+  TimeRange? wednesday = TimeRange(startTime: const TimeOfDay(hour: 11, minute: 30), endTime: const TimeOfDay(hour: 22, minute: 00));
+  TimeRange? thursday = TimeRange(startTime: const TimeOfDay(hour: 11, minute: 30), endTime: const TimeOfDay(hour: 22, minute: 00));
+  TimeRange? friday = TimeRange(startTime: const TimeOfDay(hour: 11, minute: 30), endTime: const TimeOfDay(hour: 22, minute: 00));
+  TimeRange? saturday = TimeRange(startTime: const TimeOfDay(hour: 11, minute: 30), endTime: const TimeOfDay(hour: 22, minute: 00));
+  TimeRange? sunday = TimeRange(startTime: const TimeOfDay(hour: 11, minute: 30), endTime: const TimeOfDay(hour: 22, minute: 00));
 
   final _formKey = GlobalKey<FormState>();
 
@@ -251,7 +269,9 @@ class _OfferPageState extends State<OfferPage> {
                                                         shape: RoundedRectangleBorder(
                                                             side: BorderSide(color: blackColor)
                                                         ),
-                                                        elevation: 0
+                                                        elevation: 0,
+                                                      backgroundColor: greyListTile,
+                                                      foregroundColor: blackColor
                                                     ),
                                                     child: Row(
                                                       children: [
@@ -308,7 +328,6 @@ class _OfferPageState extends State<OfferPage> {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    /*
                                     Expanded(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -322,7 +341,7 @@ class _OfferPageState extends State<OfferPage> {
                                                         Expanded(
                                                           child: ListTile(
                                                             title: Text(
-                                                              "Informações da Conta",
+                                                              "Horários",
                                                               style: GoogleFonts.fredoka(
                                                                 color: blackColor,
                                                                 fontSize: 16,
@@ -337,142 +356,608 @@ class _OfferPageState extends State<OfferPage> {
                                                     const SizedBox(
                                                       height: 16,
                                                     ),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: ListTile(
-                                                            title: Text(
-                                                              "Categoria",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor,
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w400,
+                                                    Card(
+                                                      color: greyListTile,
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    "Segunda-feira",
+                                                                    style: GoogleFonts.fredoka(
+                                                                      color: blackColor,
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: TextButton.icon(
+                                                                    key: keyMonday,
+                                                                    onPressed: () async {
+                                                                      RenderBox box = keyMonday.currentContext?.findRenderObject() as RenderBox;
+                                                                      Offset offset = box.localToGlobal(Offset.zero); //this is global position
+                                                                      showMenu(
+                                                                          context: context,
+                                                                          position: RelativeRect.fromLTRB(
+                                                                            offset.dx,
+                                                                            offset.dy,
+                                                                            MediaQuery.of(context).size.width - offset.dx,
+                                                                            MediaQuery.of(context).size.height - offset.dy,
+                                                                          ),
+                                                                          items: [
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  monday = await showTimeRangePicker(
+                                                                                    context: context,
+                                                                                    start: monday?.startTime,
+                                                                                    end: monday?.endTime
+                                                                                  );
+                                                                                  if (kDebugMode) {
+                                                                                    print("startTime ${monday?.startTime}");
+                                                                                    print("endTime ${monday?.endTime}");
+                                                                                  }
+                                                                                  setState(() {
+
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                    "Selecionar horário",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    monday = null;
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                    "Fechado",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                    fontSize: 14,
+                                                                                    fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ]
+                                                                      );
+                                                                    },
+                                                                    label: Text(
+                                                                      timeRangeConvert(monday),
+                                                                      style: GoogleFonts.fredoka(
+                                                                          fontSize: 12,
+                                                                          color: blackColor87
+                                                                      ),
+                                                                    ),
+                                                                    iconAlignment: IconAlignment.end,
+                                                                    icon: Icon(
+                                                                        FontAwesomeIcons.caretDown,
+                                                                      color: blackColor87,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            subtitle: Text(
-                                                              "${widget.screenArguments?.company?.category?.category}",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor87,
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                            ),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Divider(
-                                                      color: blackColor87,
-                                                      thickness: 0.1,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: ListTile(
-                                                            title: Text(
-                                                              "CNPJ",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor,
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w400,
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    "Terça-feira",
+                                                                    style: GoogleFonts.fredoka(
+                                                                      color: blackColor,
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: TextButton.icon(
+                                                                    key: keyTuesday,
+                                                                    onPressed: () async {
+                                                                      RenderBox box = keyTuesday.currentContext?.findRenderObject() as RenderBox;
+                                                                      Offset offset = box.localToGlobal(Offset.zero); //this is global position
+                                                                      showMenu(
+                                                                          context: context,
+                                                                          position: RelativeRect.fromLTRB(
+                                                                            offset.dx,
+                                                                            offset.dy,
+                                                                            MediaQuery.of(context).size.width - offset.dx,
+                                                                            MediaQuery.of(context).size.height - offset.dy,
+                                                                          ),
+                                                                          items: [
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  tuesday = await showTimeRangePicker(
+                                                                                      context: context,
+                                                                                      start: tuesday?.startTime,
+                                                                                      end: tuesday?.endTime
+                                                                                  );
+                                                                                  if (kDebugMode) {
+                                                                                    print("startTime ${tuesday?.startTime}");
+                                                                                    print("endTime ${tuesday?.endTime}");
+                                                                                  }
+                                                                                  setState(() {
+
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Selecionar horário",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    tuesday = null;
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Fechado",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ]
+                                                                      );
+                                                                    },
+                                                                    label: Text(
+                                                                      timeRangeConvert(monday),
+                                                                      style: GoogleFonts.fredoka(
+                                                                          fontSize: 12,
+                                                                          color: blackColor87
+                                                                      ),
+                                                                    ),
+                                                                    iconAlignment: IconAlignment.end,
+                                                                    icon: Icon(
+                                                                      FontAwesomeIcons.caretDown,
+                                                                      color: blackColor87,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            subtitle: Text(
-                                                              UtilBrasilFields.obterCnpj(widget.screenArguments?.company?.docNumber ?? ""),
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor87,
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                            ),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Divider(
-                                                      color: blackColor87,
-                                                      thickness: 0.1,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: ListTile(
-                                                            title: Text(
-                                                              "E-mail",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor,
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w400,
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    "Quarta-feira",
+                                                                    style: GoogleFonts.fredoka(
+                                                                      color: blackColor,
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: TextButton.icon(
+                                                                    key: keyWednesday,
+                                                                    onPressed: () async {
+                                                                      RenderBox box = keyWednesday.currentContext?.findRenderObject() as RenderBox;
+                                                                      Offset offset = box.localToGlobal(Offset.zero); //this is global position
+                                                                      showMenu(
+                                                                          context: context,
+                                                                          position: RelativeRect.fromLTRB(
+                                                                            offset.dx,
+                                                                            offset.dy,
+                                                                            MediaQuery.of(context).size.width - offset.dx,
+                                                                            MediaQuery.of(context).size.height - offset.dy,
+                                                                          ),
+                                                                          items: [
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  wednesday = await showTimeRangePicker(
+                                                                                      context: context,
+                                                                                      start: wednesday?.startTime,
+                                                                                      end: wednesday?.endTime
+                                                                                  );
+                                                                                  if (kDebugMode) {
+                                                                                    print("startTime ${wednesday?.startTime}");
+                                                                                    print("endTime ${wednesday?.endTime}");
+                                                                                  }
+                                                                                  setState(() {
+
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Selecionar horário",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    wednesday = null;
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Fechado",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ]
+                                                                      );
+                                                                    },
+                                                                    label: Text(
+                                                                      timeRangeConvert(wednesday),
+                                                                      style: GoogleFonts.fredoka(
+                                                                          fontSize: 12,
+                                                                          color: blackColor87
+                                                                      ),
+                                                                    ),
+                                                                    iconAlignment: IconAlignment.end,
+                                                                    icon: Icon(
+                                                                      FontAwesomeIcons.caretDown,
+                                                                      color: blackColor87,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            subtitle: Text(
-                                                              "${widget.screenArguments?.company?.email}",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor87,
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                            ),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Divider(
-                                                      color: blackColor87,
-                                                      thickness: 0.1,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: ListTile(
-                                                            title: Text(
-                                                              "Telefone",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor,
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w400,
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    "Quinta-feira",
+                                                                    style: GoogleFonts.fredoka(
+                                                                      color: blackColor,
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: TextButton.icon(
+                                                                    key: keyThursday,
+                                                                    onPressed: () async {
+                                                                      RenderBox box = keyThursday.currentContext?.findRenderObject() as RenderBox;
+                                                                      Offset offset = box.localToGlobal(Offset.zero); //this is global position
+                                                                      showMenu(
+                                                                          context: context,
+                                                                          position: RelativeRect.fromLTRB(
+                                                                            offset.dx,
+                                                                            offset.dy,
+                                                                            MediaQuery.of(context).size.width - offset.dx,
+                                                                            MediaQuery.of(context).size.height - offset.dy,
+                                                                          ),
+                                                                          items: [
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  thursday = await showTimeRangePicker(
+                                                                                      context: context,
+                                                                                      start: thursday?.startTime,
+                                                                                      end: thursday?.endTime
+                                                                                  );
+                                                                                  if (kDebugMode) {
+                                                                                    print("startTime ${thursday?.startTime}");
+                                                                                    print("endTime ${thursday?.endTime}");
+                                                                                  }
+                                                                                  setState(() {
+
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Selecionar horário",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    thursday = null;
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Fechado",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ]
+                                                                      );
+                                                                    },
+                                                                    label: Text(
+                                                                      timeRangeConvert(thursday),
+                                                                      style: GoogleFonts.fredoka(
+                                                                          fontSize: 12,
+                                                                          color: blackColor87
+                                                                      ),
+                                                                    ),
+                                                                    iconAlignment: IconAlignment.end,
+                                                                    icon: Icon(
+                                                                      FontAwesomeIcons.caretDown,
+                                                                      color: blackColor87,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            subtitle: Text(
-                                                              UtilBrasilFields.obterTelefone(widget.screenArguments?.company?.phone ?? ""),
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor87,
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                            ),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Divider(
-                                                      color: blackColor87,
-                                                      thickness: 0.1,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: ListTile(
-                                                            title: Text(
-                                                              "Endereço",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor,
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w400,
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    "Sexta-feira",
+                                                                    style: GoogleFonts.fredoka(
+                                                                      color: blackColor,
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: TextButton.icon(
+                                                                    key: keyFriday,
+                                                                    onPressed: () async {
+                                                                      RenderBox box = keyFriday.currentContext?.findRenderObject() as RenderBox;
+                                                                      Offset offset = box.localToGlobal(Offset.zero); //this is global position
+                                                                      showMenu(
+                                                                          context: context,
+                                                                          position: RelativeRect.fromLTRB(
+                                                                            offset.dx,
+                                                                            offset.dy,
+                                                                            MediaQuery.of(context).size.width - offset.dx,
+                                                                            MediaQuery.of(context).size.height - offset.dy,
+                                                                          ),
+                                                                          items: [
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  friday = await showTimeRangePicker(
+                                                                                      context: context,
+                                                                                      start: friday?.startTime,
+                                                                                      end: friday?.endTime
+                                                                                  );
+                                                                                  if (kDebugMode) {
+                                                                                    print("startTime ${friday?.startTime}");
+                                                                                    print("endTime ${friday?.endTime}");
+                                                                                  }
+                                                                                  setState(() {
+
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Selecionar horário",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    friday = null;
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Fechado",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ]
+                                                                      );
+                                                                    },
+                                                                    label: Text(
+                                                                      timeRangeConvert(friday),
+                                                                      style: GoogleFonts.fredoka(
+                                                                          fontSize: 12,
+                                                                          color: blackColor87
+                                                                      ),
+                                                                    ),
+                                                                    iconAlignment: IconAlignment.end,
+                                                                    icon: Icon(
+                                                                      FontAwesomeIcons.caretDown,
+                                                                      color: blackColor87,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            subtitle: Text(
-                                                              "${widget.screenArguments?.company?.address?.addressLine1}",
-                                                              style: GoogleFonts.fredoka(
-                                                                color: blackColor87,
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                            ),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    "Sábado",
+                                                                    style: GoogleFonts.fredoka(
+                                                                      color: blackColor,
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: TextButton.icon(
+                                                                    key: keySaturday,
+                                                                    onPressed: () async {
+                                                                      RenderBox box = keySaturday.currentContext?.findRenderObject() as RenderBox;
+                                                                      Offset offset = box.localToGlobal(Offset.zero); //this is global position
+                                                                      showMenu(
+                                                                          context: context,
+                                                                          position: RelativeRect.fromLTRB(
+                                                                            offset.dx,
+                                                                            offset.dy,
+                                                                            MediaQuery.of(context).size.width - offset.dx,
+                                                                            MediaQuery.of(context).size.height - offset.dy,
+                                                                          ),
+                                                                          items: [
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  saturday = await showTimeRangePicker(
+                                                                                      context: context,
+                                                                                      start: saturday?.startTime,
+                                                                                      end: saturday?.endTime
+                                                                                  );
+                                                                                  if (kDebugMode) {
+                                                                                    print("startTime ${saturday?.startTime}");
+                                                                                    print("endTime ${saturday?.endTime}");
+                                                                                  }
+                                                                                  setState(() {
+
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Selecionar horário",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    saturday = null;
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Fechado",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ]
+                                                                      );
+                                                                    },
+                                                                    label: Text(
+                                                                      timeRangeConvert(saturday),
+                                                                      style: GoogleFonts.fredoka(
+                                                                          fontSize: 12,
+                                                                          color: blackColor87
+                                                                      ),
+                                                                    ),
+                                                                    iconAlignment: IconAlignment.end,
+                                                                    icon: Icon(
+                                                                      FontAwesomeIcons.caretDown,
+                                                                      color: blackColor87,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: ListTile(
+                                                                  title: Text(
+                                                                    "Domingo",
+                                                                    style: GoogleFonts.fredoka(
+                                                                      color: blackColor,
+                                                                      fontSize: 16,
+                                                                      fontWeight: FontWeight.w400,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: TextButton.icon(
+                                                                    key: keySunday,
+                                                                    onPressed: () async {
+                                                                      RenderBox box = keySunday.currentContext?.findRenderObject() as RenderBox;
+                                                                      Offset offset = box.localToGlobal(Offset.zero); //this is global position
+                                                                      showMenu(
+                                                                          context: context,
+                                                                          position: RelativeRect.fromLTRB(
+                                                                            offset.dx,
+                                                                            offset.dy,
+                                                                            MediaQuery.of(context).size.width - offset.dx,
+                                                                            MediaQuery.of(context).size.height - offset.dy,
+                                                                          ),
+                                                                          items: [
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  sunday = await showTimeRangePicker(
+                                                                                      context: context,
+                                                                                      start: sunday?.startTime,
+                                                                                      end: sunday?.endTime
+                                                                                  );
+                                                                                  if (kDebugMode) {
+                                                                                    print("startTime ${sunday?.startTime}");
+                                                                                    print("endTime ${sunday?.endTime}");
+                                                                                  }
+                                                                                  setState(() {
+
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Selecionar horário",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                                value: 0,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    sunday = null;
+                                                                                  });
+                                                                                },
+                                                                                child: Text(
+                                                                                  "Fechado",
+                                                                                  style: GoogleFonts.fredoka(
+                                                                                      fontSize: 14,
+                                                                                      fontWeight: FontWeight.w400
+                                                                                  ),
+                                                                                )
+                                                                            )
+                                                                          ]
+                                                                      );
+                                                                    },
+                                                                    label: Text(
+                                                                      timeRangeConvert(sunday),
+                                                                      style: GoogleFonts.fredoka(
+                                                                          fontSize: 12,
+                                                                          color: blackColor87
+                                                                      ),
+                                                                    ),
+                                                                    iconAlignment: IconAlignment.end,
+                                                                    icon: Icon(
+                                                                      FontAwesomeIcons.caretDown,
+                                                                      color: blackColor87,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
                                                   ],
                                                 ),
                                               ),
@@ -480,7 +965,7 @@ class _OfferPageState extends State<OfferPage> {
                                           ],
                                         )
                                     ),
-                                     */
+
                                     const SizedBox(
                                       width: 16,
                                     ),

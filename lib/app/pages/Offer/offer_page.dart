@@ -1,13 +1,14 @@
 import 'dart:typed_data';
-
-import 'package:brasil_fields/brasil_fields.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupom_dashboard/app/widgets/custom_elevated_button.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
+import 'package:cupom_dashboard/data/models/type_offer.dart';
+import 'package:cupom_dashboard/domain/usecases/type_offers_process.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../data/helpers/picker_image.dart';
+import '../../../data/models/response_api.dart';
 import '../../utils/colors.dart';
 import '../../utils/paths.dart';
 import '../../widgets/ResponsiveView.dart';
@@ -31,7 +32,36 @@ class _OfferPageState extends State<OfferPage> {
 
   Uint8List? _imageBase64;
 
+  List<TypeOffer> typeOffers = [];
+  TypeOffer? selectTypeOffers;
+
   final _formKey = GlobalKey<FormState>();
+
+  getTypeOffers() async {
+    ResponseAPI? responseAPI = await TypeOffersProcess.get(categoryId: "${widget.screenArguments?.company?.category?.id}");
+    if (responseAPI != null) {
+      if (responseAPI.typeOffers != null) {
+        setState(() {
+          typeOffers = responseAPI.typeOffers!;
+        });
+      }
+    }
+    setState(() {
+
+    });
+  }
+
+  updateData() {
+    if (widget.screenArguments?.typeOffers != null) {
+
+    }
+  }
+
+  @override
+  void initState() {
+    getTypeOffers();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +113,9 @@ class _OfferPageState extends State<OfferPage> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    "Nova oferta",
+                                    widget.screenArguments?.typeOffers == null
+                                        ? "Nova oferta"
+                                        : "Atualizar oferta",
                                     style: GoogleFonts.fredoka(
                                       color: blackColor,
                                       fontSize: 34,
@@ -113,56 +145,82 @@ class _OfferPageState extends State<OfferPage> {
                                               Expanded(
                                                   child: Container()
                                               ),
-                                              Card(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(15.0),
-                                                    side: BorderSide(
-                                                      color: greyColorText,
-                                                      width: 1.0,
-                                                    ),
-                                                  ),
-                                                  semanticContainer: true,
-                                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      if (_imageBase64 != null) {
-                                                        Navigator.push(context, MaterialPageRoute(
-                                                            builder: (BuildContext context) {
-                                                              return FullScreenImage(
-                                                                initialIndex: 0,
-                                                                imagesUint8List: [_imageBase64!],
-                                                                images: [],
-                                                              );
-                                                            })
-                                                        );
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      height: 180,
-                                                      width: 180,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey,
-                                                        image: _imageBase64 == null
-                                                            ? null
-                                                            : DecorationImage(
-                                                          image: MemoryImage(_imageBase64!),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                        borderRadius: BorderRadius.circular(20), // Adjust this value for rounded corners
-                                                      ),
-                                                      child: _imageBase64 == null
-                                                          ? const Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.add_a_photo,
-                                                            size: 80,
-                                                            color: Colors.white,
+                                              FormField(
+                                                initialValue: _imageBase64,
+                                                validator: (valor) {
+                                                  if (_imageBase64 != null) {
+                                                    return null;
+                                                  }
+                                                  return "Selecione a imagem da oferta";
+                                                },
+                                                builder: (FormFieldState<dynamic> state) {
+                                                  return Column(
+                                                    children: [
+                                                      Card(
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(15.0),
+                                                          side: BorderSide(
+                                                            color: greyColorText,
+                                                            width: 1.0,
                                                           ),
-                                                        ],
-                                                      ) : null,
-                                                    ),
-                                                  ),
+                                                        ),
+                                                        semanticContainer: true,
+                                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            if (_imageBase64 != null) {
+                                                              Navigator.push(context, MaterialPageRoute(
+                                                                  builder: (BuildContext context) {
+                                                                    return FullScreenImage(
+                                                                      initialIndex: 0,
+                                                                      imagesUint8List: [_imageBase64!],
+                                                                      images: [],
+                                                                    );
+                                                                  })
+                                                              );
+                                                            }
+                                                          },
+                                                          child: Container(
+                                                            height: 180,
+                                                            width: 180,
+                                                            decoration: BoxDecoration(
+                                                              color: Colors.grey,
+                                                              image: _imageBase64 == null
+                                                                  ? null
+                                                                  : DecorationImage(
+                                                                image: MemoryImage(_imageBase64!),
+                                                                fit: BoxFit.cover,
+                                                              ),
+                                                              borderRadius: BorderRadius.circular(20), // Adjust this value for rounded corners
+                                                            ),
+                                                            child: _imageBase64 == null
+                                                                ? const Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons.add_a_photo,
+                                                                  size: 80,
+                                                                  color: Colors.white,
+                                                                ),
+                                                              ],
+                                                            ) : null,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      state.hasError ? Padding(
+                                                        padding: const EdgeInsets.symmetric(vertical: 4),
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                                "${state.errorText}",
+                                                                style: const TextStyle(color: Colors.red)
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ) : Container(),
+                                                    ],
+                                                  );
+                                                },
                                               ),
                                               Expanded(
                                                   child: Container()
@@ -503,6 +561,98 @@ class _OfferPageState extends State<OfferPage> {
                                                   const SizedBox(
                                                     height: 16,
                                                   ),
+                                                  FormField(
+                                                    initialValue: selectTypeOffers,
+                                                    validator: (validator) {
+                                                      if (selectTypeOffers != null) {
+                                                        return null;
+                                                      }
+                                                      return "Selecione o tipo de oferta";
+                                                    },
+                                                    builder: (FormFieldState<dynamic> state) {
+                                                      return Column(
+                                                        children: [
+                                                          Padding(
+                                                              padding: const EdgeInsets.all(8),
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: FittedBox(
+                                                                      fit: BoxFit.scaleDown,
+                                                                      alignment: Alignment.centerLeft,
+                                                                      child: Text(
+                                                                        "Tipo da oferta:",
+                                                                        style: GoogleFonts.fredoka(
+                                                                          color: blackColor,
+                                                                          fontSize: 14,
+                                                                          fontWeight: FontWeight.w500,
+                                                                        ),
+                                                                        textAlign: TextAlign.left,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Container(),
+                                                                  )
+                                                                ],
+                                                              )
+                                                          ),
+                                                          SizedBox(
+                                                              height: 32,
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: ListView.builder(
+                                                                      itemCount: typeOffers.length,
+                                                                      shrinkWrap: true,
+                                                                      scrollDirection: Axis.horizontal,
+                                                                      itemBuilder: (BuildContext context, int index) {
+                                                                        TypeOffer typeOffer = typeOffers[index];
+                                                                        return Padding(
+                                                                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                                                                          child: ChoiceChip.elevated(
+                                                                            label: Text(
+                                                                              "${typeOffer.name}",
+                                                                              style: GoogleFonts.fredoka(
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                  fontSize: 14
+                                                                              ),
+                                                                            ),
+                                                                            selectedColor: primaryColor,
+                                                                            backgroundColor: greyListTile,
+                                                                            checkmarkColor: blackColor,
+                                                                            selected: selectTypeOffers == typeOffer ? true : false,
+                                                                            onSelected: (bool selected) {
+                                                                              setState(() {
+                                                                                selectTypeOffers = selectTypeOffers != typeOffer ? typeOffer : null;
+                                                                              });
+                                                                            },
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )
+                                                          ),
+                                                          state.hasError ? Padding(
+                                                            padding: EdgeInsets.symmetric(vertical: 4),
+                                                            child: Row(
+                                                              children: [
+                                                                Text(
+                                                                    "${state.errorText}",
+                                                                    style: const TextStyle(color: Colors.red)
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ) : Container(),
+                                                        ],
+                                                      );
+                                                    },
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 16,
+                                                  ),
                                                   InputRegisterOffer(
                                                     colorCard: Colors.transparent,
                                                     texto: 'Descrição da oferta',
@@ -528,7 +678,15 @@ class _OfferPageState extends State<OfferPage> {
                                                     children: [
                                                       CustomElevatedButton(
                                                           onPressed: () {
-
+                                                            if (_formKey.currentState!.validate()) {
+                                                              if (kDebugMode) {
+                                                                print("Validado");
+                                                              }
+                                                            }else{
+                                                              if (kDebugMode) {
+                                                                print("Não validado");
+                                                              }
+                                                            }
                                                           },
                                                           text: "Salvar",
                                                           background: primaryColor

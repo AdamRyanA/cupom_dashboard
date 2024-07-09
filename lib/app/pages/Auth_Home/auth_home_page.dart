@@ -446,7 +446,6 @@ class _AuthHomePageState extends State<AuthHomePage> {
                                                           onPressed: () {
                                                             if (widget.screenArguments?.company?.enabled == true) {
                                                               ScreenArguments? screenArgumentsNavigator = widget.screenArguments;
-
                                                               Navigator.pushNamed(context, RouteGenerator.rOfferPage, arguments: screenArgumentsNavigator);
                                                             }else{
                                                               PanaraInfoDialog.show(context,

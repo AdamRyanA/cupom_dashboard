@@ -1,4 +1,5 @@
 import 'package:cupom_dashboard/data/models/categorys.dart';
+import 'package:cupom_dashboard/data/models/type_offer.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
 
 import 'citys.dart';
@@ -20,6 +21,8 @@ class ResponseAPI {
   Categorys? category;
   List<Categorys>? categorys;
   List<Prediction>? predictions;
+  TypeOffer? typeOffer;
+  List<TypeOffer>? typeOffers;
 
   ResponseAPI(
       this.message,
@@ -34,6 +37,8 @@ class ResponseAPI {
       this.category,
       this.categorys,
       this.predictions,
+      this.typeOffer,
+      this.typeOffers
       );
 
   factory ResponseAPI.fromJson(dynamic json) {
@@ -143,6 +148,26 @@ class ResponseAPI {
       predictions.removeWhere((element) => element.placeId == null);
     }
 
+    var jsonTypeOffer = json['type_offer'] as List<dynamic>?;
+    TypeOffer? typeOffer;
+    if (jsonTypeOffer != null) {
+      TypeOffer typeOfferResult = TypeOffer.fromJson(jsonTypeOffer);
+      typeOffer = typeOfferResult;
+    }
+
+    var jsonTypeOffers = json['type_offers'] as List<dynamic>?;
+    List<TypeOffer>? typeOffers;
+    if (jsonTypeOffers != null) {
+      typeOffers = [];
+      for (var element in jsonTypeOffers) {
+        if (element != null) {
+          var elementMap = element as Map<String, dynamic>;
+          TypeOffer typeOffersResult = TypeOffer.fromJson(elementMap);
+          typeOffers.add(typeOffersResult);
+        }
+      }
+    }
+
     return ResponseAPI(
         json["message"],
         userClient,
@@ -155,16 +180,18 @@ class ResponseAPI {
         companys,
         category,
         categorys,
-        predictions
+        predictions,
+        typeOffer,
+        typeOffers
     );
   }
 
   factory ResponseAPI.toNull() {
-    return ResponseAPI(null, null, null, null, null, null, null, null, null, null, null, null);
+    return ResponseAPI(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
   }
 
   @override
   String toString() {
-    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys, category: $category, categorys: $categorys, predictions: $predictions}';
+    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys, category: $category, categorys: $categorys, predictions: $predictions, typeOffer: $typeOffer, typeOffers: $typeOffers}';
   }
 }

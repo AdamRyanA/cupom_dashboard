@@ -4,6 +4,7 @@ import 'package:flutter_google_maps_webservices/places.dart';
 
 import 'citys.dart';
 import 'company.dart';
+import 'offer.dart';
 import 'subscription.dart';
 import 'user_client.dart';
 
@@ -23,6 +24,8 @@ class ResponseAPI {
   List<Prediction>? predictions;
   TypeOffer? typeOffer;
   List<TypeOffer>? typeOffers;
+  Offer? offer;
+  List<Offer>? offers;
 
   ResponseAPI(
       this.message,
@@ -38,7 +41,9 @@ class ResponseAPI {
       this.categorys,
       this.predictions,
       this.typeOffer,
-      this.typeOffers
+      this.typeOffers,
+      this.offer,
+      this.offers
       );
 
   factory ResponseAPI.fromJson(dynamic json) {
@@ -168,6 +173,26 @@ class ResponseAPI {
       }
     }
 
+    var jsonOffer = json['offer'] as Map<String, dynamic>?;
+    Offer? offer;
+    if (jsonOffer != null) {
+      Offer offerResult = Offer.fromJson(jsonOffer);
+      offer = offerResult;
+    }
+
+    var jsonOffers = json['offers'] as List<dynamic>?;
+    List<Offer>? offers;
+    if (jsonOffers != null) {
+      offers = [];
+      for (var element in jsonOffers) {
+        if (element != null) {
+          var elementMap = element as Map<String, dynamic>;
+          Offer offersResult = Offer.fromJson(elementMap);
+          offers.add(offersResult);
+        }
+      }
+    }
+
     return ResponseAPI(
         json["message"],
         userClient,
@@ -182,16 +207,18 @@ class ResponseAPI {
         categorys,
         predictions,
         typeOffer,
-        typeOffers
+        typeOffers,
+        offer,
+        offers
     );
   }
 
   factory ResponseAPI.toNull() {
-    return ResponseAPI(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    return ResponseAPI(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
   }
 
   @override
   String toString() {
-    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys, category: $category, categorys: $categorys, predictions: $predictions, typeOffer: $typeOffer, typeOffers: $typeOffers}';
+    return '{message: $message, user: $user, users: $users, subscription: $subscription, subscriptions: $subscriptions, city: $city, citys: $citys, company: $company, companys: $companys, category: $category, categorys: $categorys, predictions: $predictions, typeOffer: $typeOffer, typeOffers: $typeOffers, offer: $offer, offers: $offers}';
   }
 }

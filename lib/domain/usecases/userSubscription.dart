@@ -13,7 +13,7 @@ class UserSubscription {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.userSubscription}$uid";
+      String url = "${ApiReduu.userSubscription}$uid";
       ResponseAPI? responseResult = await DioHelper.get(url: url);
       return responseResult;
     }else{
@@ -30,7 +30,7 @@ class UserSubscription {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.userSubscription}$uid";
+      String url = "${ApiReduu.userSubscription}$uid";
       ResponseAPI? responseResult = await DioHelper.post(url: url);
       return responseResult;
     }else{
@@ -47,7 +47,7 @@ class UserSubscription {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.userSubscription}$uid";
+      String url = "${ApiReduu.userSubscription}$uid";
       ResponseAPI? responseResult = await DioHelper.delete(url: url);
       return responseResult;
     }else{

@@ -3,11 +3,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupom_dashboard/app/utils/route_generator.dart';
 import 'package:cupom_dashboard/app/utils/utils.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
+import 'package:cupom_dashboard/data/models/response_api.dart';
+import 'package:cupom_dashboard/domain/usecases/offer_process.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 
+import '../../../data/models/offer.dart';
 import '../../../domain/usecases/Authentication.dart';
 import '../../utils/colors.dart';
 import '../../utils/paths.dart';
@@ -23,6 +26,29 @@ class AuthHomePage extends StatefulWidget {
 }
 
 class _AuthHomePageState extends State<AuthHomePage> {
+
+
+  List<Offer> offers = [];
+
+  getOffers() async {
+    ResponseAPI? responseAPI = await OfferProcess.get(company: widget.screenArguments?.company?.id);
+    if (responseAPI != null) {
+      if (responseAPI.offers != null) {
+        setState(() {
+          offers = responseAPI.offers!;
+        });
+      }
+    }
+  }
+
+
+  @override
+  void initState() {
+    getOffers();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveView(
@@ -255,9 +281,9 @@ class _AuthHomePageState extends State<AuthHomePage> {
                                                                 ),
                                                               ),
                                                               IconButton(
-                                                                  onPressed: () {
+                                                                  onPressed: () async {
                                                                     ScreenArguments? screenArgumentsNavigator = widget.screenArguments;
-                                                                    Navigator.pushNamed(context, RouteGenerator.rCompanyEdit, arguments: screenArgumentsNavigator);
+                                                                    await Navigator.pushNamed(context, RouteGenerator.rCompanyEdit, arguments: screenArgumentsNavigator);
                                                                   },
                                                                   icon: Icon(
                                                                       FontAwesomeIcons.edit,
@@ -443,10 +469,12 @@ class _AuthHomePageState extends State<AuthHomePage> {
                                                         ),
                                                         tileColor: greyListTile,
                                                         trailing: TextButton.icon(
-                                                          onPressed: () {
+                                                          onPressed: () async {
                                                             if (widget.screenArguments?.company?.enabled == true) {
                                                               ScreenArguments? screenArgumentsNavigator = widget.screenArguments;
-                                                              Navigator.pushNamed(context, RouteGenerator.rOfferPage, arguments: screenArgumentsNavigator);
+                                                              screenArgumentsNavigator?.offer = null;
+                                                              await Navigator.pushNamed(context, RouteGenerator.rOfferPage, arguments: screenArgumentsNavigator);
+                                                              getOffers();
                                                             }else{
                                                               PanaraInfoDialog.show(context,
                                                                   message: "Sua empresa ainda não foi aprovada. Aguarde a aprovação para adicionar ofertas.",
@@ -473,6 +501,142 @@ class _AuthHomePageState extends State<AuthHomePage> {
                                                       ),
                                                     ),
                                                   ],
+                                                ),
+                                                ListView.builder(
+                                                  itemCount: offers.length,
+                                                  shrinkWrap: true,
+                                                  physics: const ScrollPhysics(),
+                                                  itemBuilder: (BuildContext context, int index) {
+                                                    Offer offer = offers[index];
+                                                    return Padding(
+                                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: ListTile(
+                                                              leading: Card(
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(15.0),
+                                                                    side: BorderSide(
+                                                                      color: greyColorText,
+                                                                      width: 1.0,
+                                                                    ),
+                                                                  ),
+                                                                  semanticContainer: true,
+                                                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                  child: CachedNetworkImage(
+                                                                    imageUrl: "${widget.screenArguments?.company?.photo}",
+                                                                    imageBuilder: (context, imageProvider) => GestureDetector(
+                                                                      onTap: () {
+                                                                        Navigator.push(context, MaterialPageRoute(
+                                                                            builder: (BuildContext context) {
+                                                                              return FullScreenImage(
+                                                                                initialIndex: 0,
+                                                                                images: ["${widget.screenArguments?.company?.photo}"],
+                                                                              );
+                                                                            })
+                                                                        );
+                                                                      },
+                                                                      child: Container(
+                                                                        decoration: BoxDecoration(
+                                                                          image: DecorationImage(
+                                                                              image: imageProvider,
+                                                                              fit: BoxFit.cover
+                                                                          ),
+                                                                        ),
+                                                                        width: 64,
+                                                                        height: 64,
+                                                                      ),
+                                                                    ),
+                                                                    fit: BoxFit.fill,
+                                                                    width: 64,
+                                                                    height: 64,
+                                                                    errorWidget: (context, url, error) => const Icon(
+                                                                      FontAwesomeIcons.building,
+                                                                    ),
+                                                                  )
+                                                              ),
+                                                              title: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      "${offer.name}",
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                                                                      child: ChoiceChip.elevated(
+                                                                        label: Text(
+                                                                          "${offer.typeOffer?.name}",
+                                                                          style: GoogleFonts.fredoka(
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 14,
+                                                                              color: blackColor
+                                                                          ),
+                                                                        ),
+                                                                        selectedColor: primaryColor,
+                                                                        backgroundColor: greyListTile,
+                                                                        checkmarkColor: blackColor,
+                                                                        selected: true,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  IconButton(
+                                                                      onPressed: () async {
+                                                                        ScreenArguments? screenArgumentsResult = widget.screenArguments;
+                                                                        screenArgumentsResult?.offer = offer;
+                                                                        await Navigator.pushNamed(context, RouteGenerator.rOfferPage, arguments: screenArgumentsResult);
+                                                                        getOffers();
+                                                                      },
+                                                                      icon: const Icon(
+                                                                          FontAwesomeIcons.penToSquare
+                                                                      )
+                                                                  ),
+                                                                  IconButton(
+                                                                      onPressed: () async {
+                                                                        ResponseAPI? responseAPI = await OfferProcess.delete(
+                                                                            id: offer.id,
+                                                                            company: offer.company?.id
+                                                                        );
+                                                                        if (responseAPI != null) {
+                                                                          await PanaraInfoDialog.show(
+                                                                              context,
+                                                                              message: "Oferta deletada",
+                                                                              buttonText: "OK",
+                                                                              onTapDismiss: () {
+                                                                                Navigator.pop(context);
+                                                                              },
+                                                                              panaraDialogType: PanaraDialogType.success
+                                                                          );
+                                                                          getOffers();
+                                                                        }else{
+                                                                          await PanaraInfoDialog.show(
+                                                                              context,
+                                                                              message: "Erro ao deletar oferta",
+                                                                              buttonText: "OK",
+                                                                              onTapDismiss: () {
+                                                                                Navigator.pop(context);
+                                                                              },
+                                                                              panaraDialogType: PanaraDialogType.error
+                                                                          );
+                                                                          getOffers();
+                                                                        }
+                                                                      },
+                                                                      icon: const Icon(
+                                                                          FontAwesomeIcons.trash
+                                                                      )
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              tileColor: greyListTile,
+                                                                minTileHeight: 80
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                                 const SizedBox(
                                                   height: 16,

@@ -15,7 +15,7 @@ class TypeOffersProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.typeoffers}$categoryId";
+      String url = "${ApiReduu.typeoffers}$categoryId";
       if (kDebugMode) {
         print(url);
       }

@@ -14,7 +14,7 @@ class CompanyProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.company}$uid";
+      String url = "${ApiReduu.company}$uid";
       if (kDebugMode) {
         print(url);
       }
@@ -40,7 +40,7 @@ class CompanyProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.company}new";
+      String url = "${ApiReduu.company}new";
       if (kDebugMode) {
         print(url);
       }
@@ -76,7 +76,7 @@ class CompanyProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.company}new";
+      String url = "${ApiReduu.company}new";
       if (kDebugMode) {
         print(url);
       }

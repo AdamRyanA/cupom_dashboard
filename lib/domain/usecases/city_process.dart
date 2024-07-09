@@ -13,7 +13,7 @@ class CityProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = ApiCupomRatata.citys;
+      String url = ApiReduu.citys;
       if (kDebugMode) {
         print(url);
       }

@@ -1,5 +1,6 @@
 import 'address.dart';
 import 'company.dart';
+import 'offer.dart';
 import 'restaurant.dart';
 import 'subscription.dart';
 import 'type_offer.dart';
@@ -12,6 +13,7 @@ class ScreenArguments {
   Company? company;
   Address? address;
   TypeOffer? typeOffers;
+  Offer? offer;
 
   ScreenArguments();
 }

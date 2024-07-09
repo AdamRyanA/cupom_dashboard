@@ -20,7 +20,7 @@ class MapsProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = ApiCupomRatata.autocomplete;
+      String url = ApiReduu.autocomplete;
       if (kDebugMode) {
         print(url);
       }

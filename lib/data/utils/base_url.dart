@@ -1,4 +1,4 @@
-class ApiCupomRatata {
+class ApiReduu {
   static String baseUrl = "https://www.api-reduu.com/";
   static String company = "${baseUrl}company/";
   static String user = "${baseUrl}user/";
@@ -7,5 +7,6 @@ class ApiCupomRatata {
   static String citys = "${baseUrl}citys";
   static String categorys = "${baseUrl}categorys";
   static String typeoffers = "${baseUrl}typeoffers/";
+  static String offer = "${baseUrl}offer/";
   static String autocomplete = "${baseUrl}autocomplete";
 }

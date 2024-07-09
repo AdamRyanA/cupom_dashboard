@@ -13,7 +13,7 @@ class CategoryProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = ApiCupomRatata.categorys;
+      String url = ApiReduu.categorys;
       if (kDebugMode) {
         print(url);
       }

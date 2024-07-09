@@ -13,7 +13,7 @@ class UserProcess {
     String? uid = user.currentUser?.uid;
 
     if (uid != null) {
-      String url = "${ApiCupomRatata.user}$uid";
+      String url = "${ApiReduu.user}$uid";
       if (kDebugMode) {
         print(url);
       }

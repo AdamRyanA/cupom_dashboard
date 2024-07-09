@@ -2,11 +2,14 @@ import 'dart:typed_data';
 import 'package:cupom_dashboard/app/widgets/custom_elevated_button.dart';
 import 'package:cupom_dashboard/data/models/models.dart';
 import 'package:cupom_dashboard/data/models/type_offer.dart';
+import 'package:cupom_dashboard/domain/usecases/offer_process.dart';
 import 'package:cupom_dashboard/domain/usecases/type_offers_process.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 import '../../../data/helpers/picker_image.dart';
 import '../../../data/helpers/time_range_convert.dart';
@@ -67,11 +70,110 @@ class _OfferPageState extends State<OfferPage> {
     setState(() {
 
     });
+    updateData();
   }
 
-  updateData() {
-    if (widget.screenArguments?.typeOffers != null) {
+  updateData() async {
+    if (widget.screenArguments?.offer != null) {
+      offerName.text = widget.screenArguments?.offer?.name ?? "";
+      categoryOffer.text = widget.screenArguments?.offer?.categoryOffer ?? "";
+      descriptionOffer.text = widget.screenArguments?.offer?.descriptionOffer ?? "";
+      selectTypeOffers = widget.screenArguments?.offer?.typeOffer;
+      monday = widget.screenArguments?.offer?.monday;
+      tuesday = widget.screenArguments?.offer?.tuesday;
+      wednesday = widget.screenArguments?.offer?.wednesday;
+      thursday = widget.screenArguments?.offer?.thursday;
+      friday = widget.screenArguments?.offer?.friday;
+      if (widget.screenArguments?.offer?.saturday == null) {
+        saturday = null;
+      }else{
+        saturday = widget.screenArguments?.offer?.saturday;
+      }
+      sunday = widget.screenArguments?.offer?.sunday;
+      if (widget.screenArguments?.offer?.photo != null) {
+        _imageBase64 = await PickerImage.loadImageFromNetwork("${widget.screenArguments?.offer?.photo}");
+      }
+    }
+    setState(() {
 
+    });
+  }
+
+  save(BuildContext context) async {
+    EasyLoading.show(status: "Salvando...");
+    ResponseAPI? responseResult;
+    if (widget.screenArguments?.offer != null) {
+      responseResult = await OfferProcess.put(
+          id: widget.screenArguments?.offer?.id,
+          company: "${widget.screenArguments?.company?.id}",
+          name: offerName.text,
+          category: "${widget.screenArguments?.company?.category?.id}",
+          categoryOffer: categoryOffer.text,
+          descriptionOffer: descriptionOffer.text,
+          photo: _imageBase64 == null ? null : PickerImage.convertUint8ListToBase64(_imageBase64!),
+          typeOffer: selectTypeOffers?.id,
+          mondayStart: parseStringTimeOfDay(monday?.startTime),
+          mondayEnd: parseStringTimeOfDay(monday?.endTime),
+          tuesdayStart: parseStringTimeOfDay(tuesday?.startTime),
+          tuesdayEnd: parseStringTimeOfDay(tuesday?.endTime),
+          wednesdayStart: parseStringTimeOfDay(wednesday?.startTime),
+          wednesdayEnd: parseStringTimeOfDay(wednesday?.endTime),
+          thursdayStart: parseStringTimeOfDay(thursday?.startTime),
+          thursdayEnd: parseStringTimeOfDay(thursday?.endTime),
+          fridayStart: parseStringTimeOfDay(friday?.startTime),
+          fridayEnd: parseStringTimeOfDay(friday?.endTime),
+          saturdayStart: parseStringTimeOfDay(saturday?.startTime),
+          saturdayEnd: parseStringTimeOfDay(saturday?.endTime),
+          sundayStart: parseStringTimeOfDay(sunday?.startTime),
+          sundayEnd: parseStringTimeOfDay(sunday?.endTime)
+      );
+    }else{
+      responseResult = await OfferProcess.post(
+          company: "${widget.screenArguments?.company?.id}",
+          name: offerName.text,
+          category: "${widget.screenArguments?.company?.category?.id}",
+          categoryOffer: categoryOffer.text,
+          descriptionOffer: descriptionOffer.text,
+          photo: _imageBase64 == null ? null : PickerImage.convertUint8ListToBase64(_imageBase64!),
+          typeOffer: selectTypeOffers?.id,
+          mondayStart: parseStringTimeOfDay(monday?.startTime),
+          mondayEnd: parseStringTimeOfDay(monday?.endTime),
+          tuesdayStart: parseStringTimeOfDay(tuesday?.startTime),
+          tuesdayEnd: parseStringTimeOfDay(tuesday?.endTime),
+          wednesdayStart: parseStringTimeOfDay(wednesday?.startTime),
+          wednesdayEnd: parseStringTimeOfDay(wednesday?.endTime),
+          thursdayStart: parseStringTimeOfDay(thursday?.startTime),
+          thursdayEnd: parseStringTimeOfDay(thursday?.endTime),
+          fridayStart: parseStringTimeOfDay(friday?.startTime),
+          fridayEnd: parseStringTimeOfDay(friday?.endTime),
+          saturdayStart: parseStringTimeOfDay(saturday?.startTime),
+          saturdayEnd: parseStringTimeOfDay(saturday?.endTime),
+          sundayStart: parseStringTimeOfDay(sunday?.startTime),
+          sundayEnd: parseStringTimeOfDay(sunday?.endTime)
+      );
+    }
+    EasyLoading.dismiss();
+    if (responseResult != null) {
+      await PanaraInfoDialog.show(
+          context,
+          message: "Oferta salva",
+          buttonText: "OK",
+          onTapDismiss: () {
+            Navigator.pop(context);
+          },
+          panaraDialogType: PanaraDialogType.success
+      );
+      Navigator.pop(context);
+    }else{
+      await PanaraInfoDialog.show(
+          context,
+          message: "Erro ao salvar oferta",
+          buttonText: "OK",
+          onTapDismiss: () {
+            Navigator.pop(context);
+          },
+          panaraDialogType: PanaraDialogType.error
+      );
     }
   }
 
@@ -131,7 +233,7 @@ class _OfferPageState extends State<OfferPage> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    widget.screenArguments?.typeOffers == null
+                                    widget.screenArguments?.offer == null
                                         ? "Nova oferta"
                                         : "Atualizar oferta",
                                     style: GoogleFonts.fredoka(
@@ -514,7 +616,7 @@ class _OfferPageState extends State<OfferPage> {
                                                                       );
                                                                     },
                                                                     label: Text(
-                                                                      timeRangeConvert(monday),
+                                                                      timeRangeConvert(tuesday),
                                                                       style: GoogleFonts.fredoka(
                                                                           fontSize: 12,
                                                                           color: blackColor87
@@ -1106,7 +1208,7 @@ class _OfferPageState extends State<OfferPage> {
                                                                             selectedColor: primaryColor,
                                                                             backgroundColor: greyListTile,
                                                                             checkmarkColor: blackColor,
-                                                                            selected: selectTypeOffers == typeOffer ? true : false,
+                                                                            selected: selectTypeOffers?.id == typeOffer.id ? true : false,
                                                                             onSelected: (bool selected) {
                                                                               setState(() {
                                                                                 selectTypeOffers = selectTypeOffers != typeOffer ? typeOffer : null;
@@ -1166,6 +1268,7 @@ class _OfferPageState extends State<OfferPage> {
                                                             if (_formKey.currentState!.validate()) {
                                                               if (kDebugMode) {
                                                                 print("Validado");
+                                                                save(context);
                                                               }
                                                             }else{
                                                               if (kDebugMode) {

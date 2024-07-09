@@ -1282,13 +1282,38 @@ class _OfferPageState extends State<OfferPage> {
                                                       const SizedBox(
                                                         width: 16,
                                                       ),
-                                                      CustomElevatedButton(
-                                                          onPressed: () {
-
+                                                      widget.screenArguments?.offer != null ? CustomElevatedButton(
+                                                          onPressed: () async {
+                                                            ResponseAPI? responseAPI = await OfferProcess.delete(
+                                                                id: widget.screenArguments?.offer?.id,
+                                                                company: widget.screenArguments?.offer?.company?.id
+                                                            );
+                                                            if (responseAPI != null) {
+                                                              await PanaraInfoDialog.show(
+                                                                  context,
+                                                                  message: "Oferta deletada",
+                                                                  buttonText: "OK",
+                                                                  onTapDismiss: () {
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  panaraDialogType: PanaraDialogType.success
+                                                              );
+                                                              Navigator.pop(context);
+                                                            }else{
+                                                              await PanaraInfoDialog.show(
+                                                                  context,
+                                                                  message: "Erro ao deletar oferta",
+                                                                  buttonText: "OK",
+                                                                  onTapDismiss: () {
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  panaraDialogType: PanaraDialogType.error
+                                                              );
+                                                            }
                                                           },
                                                           text: "Excluir",
                                                           background: whiteColor
-                                                      ),
+                                                      ) : Container(),
                                                     ],
                                                   )
                                                 ],

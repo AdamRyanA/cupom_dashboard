@@ -4,12 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../data/models/response_api.dart';
 import '../../../domain/usecases/Authentication.dart';
 import '../../../domain/usecases/company_process.dart';
 import '../../utils/colors.dart';
 import '../../utils/paths.dart';
+import '../../utils/route_generator.dart';
 import '../../widgets/AuthRecover.dart';
 import '../../widgets/AuthRegister.dart';
 import '../../widgets/ResponsiveView.dart';
@@ -244,6 +246,19 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
             DeviceOrientation.portraitDown,
           ]);
           return Scaffold(
+            extendBodyBehindAppBar: true,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.rHome, (route) => false);
+                    },
+                    icon: const Icon(
+                        FontAwesomeIcons.x,
+                      color: Colors.white,
+                    )
+                ),
+              ),
               backgroundColor: primaryColor,
               body: SizedBox(
                   width: largura,

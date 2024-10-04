@@ -4,6 +4,7 @@ import 'package:cupom_dashboard/data/helpers/launch_url.dart';
 import 'package:cupom_dashboard/domain/usecases/Authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -240,57 +241,6 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 40),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: Container(
-                                              width: 59,
-                                              height: 15,
-                                              decoration: BoxDecoration(
-                                                  color: blueColor,
-                                                  borderRadius: BorderRadius.circular(19)
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: Container(
-                                              width: 59,
-                                              height: 15,
-                                              decoration: BoxDecoration(
-                                                  color: greyDarkColor,
-                                                  borderRadius: BorderRadius.circular(19)
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: Container(
-                                              width: 59,
-                                              height: 15,
-                                              decoration: BoxDecoration(
-                                                  color: greyDarkColor,
-                                                  borderRadius: BorderRadius.circular(19)
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: Container(
-                                              width: 59,
-                                              height: 15,
-                                              decoration: BoxDecoration(
-                                                  color: greyDarkColor,
-                                                  borderRadius: BorderRadius.circular(19)
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
                                   ],
                                 )
                               ],
@@ -483,10 +433,89 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Contato', style: heading6,),
-                              Text('Whatsapp: (11) 99282-92812', style: body1.copyWith(color: blackColor60)),
-                              Text('Telefone Fixo: (11) 2748-9221', style: body1.copyWith(color: blackColor60)),
-                              Text('E-mail: suporteapp@compartilha.com', style: body1.copyWith(color: blackColor60)),
+                              Text(
+                                'Contato',
+                                style: heading6,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  launchUrl(Uri.parse("https://wa.me/5545988079910"));
+                                },
+                                style: TextButton.styleFrom(foregroundColor: primaryLightColor),
+                                child: RichText(
+                                  text: TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'Whatsapp: ',
+                                        ),
+                                        TextSpan(
+                                            text: '(45) 98807-9910',
+                                            style: body1.copyWith(
+                                              color: blueColor,
+                                            ),
+
+                                        )
+                                      ],
+                                      style: body1.copyWith(
+                                          color: blackColor60
+                                      )
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  launchUrl(Uri(
+                                    scheme: 'tel',
+                                    path: '45988079910'
+                                  ));
+                                },
+                                style: TextButton.styleFrom(foregroundColor: primaryLightColor),
+                                child: RichText(
+                                  text: TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'Telefone Fixo: ',
+                                        ),
+                                        TextSpan(
+                                            text: '(45) 98807-9910',
+                                            style: body1.copyWith(
+                                              color: blueColor,
+                                            )
+                                        )
+                                      ],
+                                      style: body1.copyWith(
+                                          color: blackColor60
+                                      )
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  launchUrl(Uri(
+                                      scheme: 'mailto',
+                                      path: 'lucascamp@decampweb.com.br'
+                                  ));
+                                },
+                                style: TextButton.styleFrom(foregroundColor: primaryLightColor),
+                                child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'E-mail: ',
+                                        ),
+                                        TextSpan(
+                                          text: 'lucascamp@decampweb.com.br',
+                                          style: body1.copyWith(
+                                            color: blueColor,
+                                          )
+                                        )
+                                      ],
+                                      style: body1.copyWith(
+                                        color: blackColor60
+                                      )
+                                    ),
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(width: 64),
@@ -499,7 +528,7 @@ class _HomePageState extends State<HomePage> {
                                 style: body1.copyWith(color: blackColor60),
                               ),
                               Text(
-                                'CNPJ: 391.029.129/001-09',
+                                'CNPJ: 45.412.549/0001-21',
                                 style: body1.copyWith(color: blackColor60),
                               ),
                             ],

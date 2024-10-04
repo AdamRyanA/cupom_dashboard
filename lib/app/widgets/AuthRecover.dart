@@ -47,160 +47,162 @@ class AuthRecover extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Recuperar senha.",
-                              style: GoogleFonts.fredoka(
-                                color: blackColor,
-                                fontSize: 34,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: FittedBox(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.center,
-                              child: RichText(
-                                text: TextSpan(
-                                    style: GoogleFonts.fredoka(
-                                      color: blackColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    children: const [
-                                      TextSpan(
-                                        text: "Um e-mail será enviado para sua conta com instruções para recuperar sua senha.",
-                                      ),
-                                    ]
+                              child: Text(
+                                "Recuperar senha.",
+                                style: GoogleFonts.fredoka(
+                                  color: blackColor,
+                                  fontSize: 34,
+                                  fontWeight: FontWeight.w400,
                                 ),
-                              )
-                          ),
-                        )
-                      ],
-                    )
-                ),
-                ValueListenableBuilder(
-                  valueListenable: authController.email,
-                  builder: (_, value, __) {
-                    return InputRegister(
-                      colorCard: Colors.transparent,
-                      texto: 'E-mail',
-                      controllerName: emailController,
-                      hintText: 'Digite seu E-mail',
-                      onChange: (value) {
-                        authController.email.value = value;
-                        authController.checkValidateRecover();
-                      },
-                      validator: (valor) {
-                        if (EmailValidator.validate(emailController.text)) {
-                          return null;
-                        }else{
-                          return "Digite um E-mail válido";
-                        }
-                      },
-                      onSubmitted: (valor) {
-                        onPressed!();                  },
-                    );
-                  },
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  width: 300,
-                  child: ValueListenableBuilder(
-                    valueListenable: authController.valid,
-                    builder: (_, value, __) {
-                      return ElevatedButton(
-                          onPressed: value ? () {
-                            if (loading) {
-                              if (kDebugMode) {
-                                print("Not to do");
-                              }
-                            }else{
-                              onPressed!();
-                            }
-                          } : null,
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: !loading ? primaryColor : blackColor,
-                            backgroundColor: !loading ? whiteColor : Colors.grey,
-                            disabledBackgroundColor: Colors.grey,
-                            disabledForegroundColor: blackColor,
-                          ),
-                          child: const Row(
-                              children: [
-                                Expanded(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text("Enviar E-mail"),
-                                  ),
-                                ),
-                              ]
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
                           )
+                        ],
+                      )
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.center,
+                                child: RichText(
+                                  text: TextSpan(
+                                      style: GoogleFonts.fredoka(
+                                        color: blackColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      children: const [
+                                        TextSpan(
+                                          text: "Um e-mail será enviado para sua conta com instruções para recuperar sua senha.",
+                                        ),
+                                      ]
+                                  ),
+                                )
+                            ),
+                          )
+                        ],
+                      )
+                  ),
+                  ValueListenableBuilder(
+                    valueListenable: authController.email,
+                    builder: (_, value, __) {
+                      return InputRegister(
+                        colorCard: Colors.transparent,
+                        texto: 'E-mail',
+                        controllerName: emailController,
+                        hintText: 'Digite seu E-mail',
+                        onChange: (value) {
+                          authController.email.value = value;
+                          authController.checkValidateRecover();
+                        },
+                        validator: (valor) {
+                          if (EmailValidator.validate(emailController.text)) {
+                            return null;
+                          }else{
+                            return "Digite um E-mail válido";
+                          }
+                        },
+                        onSubmitted: (valor) {
+                          onPressed!();                  },
                       );
                     },
                   ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.center,
-                              child: RichText(
-                                text: TextSpan(
-                                    style: GoogleFonts.fredoka(
-                                      color: blackColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    width: 300,
+                    child: ValueListenableBuilder(
+                      valueListenable: authController.valid,
+                      builder: (_, value, __) {
+                        return ElevatedButton(
+                            onPressed: value ? () {
+                              if (loading) {
+                                if (kDebugMode) {
+                                  print("Not to do");
+                                }
+                              }else{
+                                onPressed!();
+                              }
+                            } : null,
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: !loading ? primaryColor : blackColor,
+                              backgroundColor: !loading ? whiteColor : Colors.grey,
+                              disabledBackgroundColor: Colors.grey,
+                              disabledForegroundColor: blackColor,
+                            ),
+                            child: const Row(
+                                children: [
+                                  Expanded(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text("Enviar E-mail"),
                                     ),
-                                    children: [
-                                      const TextSpan(
-                                        text: "Esqueceu a senha? ",
+                                  ),
+                                ]
+                            )
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.center,
+                                child: RichText(
+                                  text: TextSpan(
+                                      style: GoogleFonts.fredoka(
+                                        color: blackColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                      TextSpan(
-                                          text: "Voltar para tela de acesso",
-                                          style: GoogleFonts.fredoka(
-                                              color: blueColor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              decoration: TextDecoration.underline
-                                          ),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = onPressedRecover
-                                      )
-                                    ]
-                                ),
-                              )
-                          ),
-                        )
-                      ],
-                    )
-                ),
-              ],
+                                      children: [
+                                        const TextSpan(
+                                          text: "Esqueceu a senha? ",
+                                        ),
+                                        TextSpan(
+                                            text: "Voltar para tela de acesso",
+                                            style: GoogleFonts.fredoka(
+                                                color: blueColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                decoration: TextDecoration.underline
+                                            ),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = onPressedRecover
+                                        )
+                                      ]
+                                  ),
+                                )
+                            ),
+                          )
+                        ],
+                      )
+                  ),
+                ],
+              ),
             ),
           )
         ],
